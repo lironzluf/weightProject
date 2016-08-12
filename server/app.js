@@ -4,8 +4,6 @@ var edge = require('edge');
 var port = 12345;
 var passport = require('passport');
 var Strategy = require('passport-http').BasicStrategy;
-var favicon = require('serve-favicon');
-app.use(favicon(__dirname + '/favicon.ico'));
 var db = require('./db');
 var bodyParser = require('body-parser')
 app.use(bodyParser.json());
