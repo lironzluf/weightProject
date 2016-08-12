@@ -1,0 +1,32 @@
+<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}" ng-init="mCtrl.initClientList()">
+    <div class="card">
+        <div class="card-header">
+            <h2>Client List <small>List of all the clients in the database</small></h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Primary Phone</th>
+                    <th>Secondary Phone</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="client in mCtrl.ClientList"> <!-- ng-repeat -->
+                    <td>{{client.user_id}}</td>
+                    <td>{{client.firstname}}</td>
+                    <td>{{client.lastname}}</td>
+                    <td>{{client.email}}</td>
+                    <td>{{client.primary_phone}}</td>
+                    <td>{{client.secondary_phone}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

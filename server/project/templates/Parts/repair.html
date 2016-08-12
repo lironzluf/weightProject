@@ -1,0 +1,38 @@
+<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}" ng-init="mCtrl.initRepairList()">
+    <div class="card">
+        <div class="card-header">
+            <h2>Repair List <small>List of all the part being repaired in the database</small></h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Repair Status ID</th>
+                    <th>Repair ID</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>User ID</th>
+                    <th>User First Name</th>
+                    <th>User Last Name</th>
+                    <th>User Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="repair in mCtrl.RepairList"> <!-- ng-repeat -->
+                    <td>{{repair.id}}</td>
+                    <td>{{repair.repair_id}}</td>
+                    <td>{{repair.status}}</td>
+                    <td>{{repair.created_at}}</td>
+                    <td>{{repair.updated_at}}</td>
+                    <td>{{repair.user_id}}</td>
+                    <td>{{repair.userFirstName}}</td>
+                    <td>{{repair.userLastName}}</td>
+                    <td>{{repair.userEmail}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}">
+    <div class="card">
+        <div class="card-header">
+            <h2>Search Brand <small>Brand ID must be an integer
+            </small></h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <form role="form" class="ng-pristine ng-valid" ng-submit="mCtrl.searchBrand()">
+                <div class="form-group fg-line">
+                    <label for="ID">Brand ID</label>
+                    <input type="text" class="form-control input-sm" name="ID" id="ID" ng-model="$root.ID" placeholder="Enter Brand ID">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm m-t-10 waves-effect">Search</button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="card" style="display:none" id="searchResults">
+        <div class="card-header">
+            <h2>Matching Brands <small></small></h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Brand Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr> <!-- ng-repeat -->
+                    <td>{{mCtrl.BrandList[0].id}}</td>
+                    <td>{{mCtrl.BrandList[0]._name}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

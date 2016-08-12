@@ -1,0 +1,24 @@
+<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}" ng-init="mCtrl.initBrandList()">
+    <div class="card">
+        <div class="card-header">
+            <h2>Brands List <small>List of all the brands in the database</small></h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Brand Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="brand in mCtrl.BrandList"> <!-- ng-repeat -->
+                    <td>{{brand.id}}</td>
+                    <td>{{brand._name}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

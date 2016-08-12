@@ -1,0 +1,106 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <div toggle-class="open" class="menu-trigger" ng-click="hCtrl.sideMenuToggle()">
+                <div class="line-wrap">
+                    <span class="line top"></span>
+                    <span class="line center"></span>
+                    <span class="line bottom"></span>
+                </div>
+            </div>
+            <div style="margin-top: -36px;margin-left: 60px;"><a href="#/home">Warehouse Admin Panel</a></div>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <!--left side nav-->
+            </ul>
+            <ul class="nav navbar-nav navbar-right hide">
+                <!--right side nav-->
+                <li><a href="../navbar/">Default</a></li>
+                <li><a href="../navbar-static-top/">Static top</a></li>
+                <li><a href="./">Fixed top <span class="sr-only">(current)</span></a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+
+<aside id="sideBar">
+    <div class="profile-menu">
+        <a href="">
+            <div class="profile-pic" style="display:inline-block">
+                <img src="img/profile-pics/1.jpg" alt="">
+            </div>
+            <div class="profile-pic" style="display:inline-block">
+                <img src="img/profile-pics/2.jpg" alt="">
+            </div>
+            <div class="profile-info">Liron Zluf & Eyal Fridman
+                <i class="material-icons hide">keyboard_arrow_down</i>
+            </div>
+        </a>
+    </div>
+    <ul class="main-menu">
+        <li class="active">
+            <a href="#/home">
+            <i class="material-icons">home</i> Home</a>
+        </li>
+        <li>
+            <a href="#/clients">
+                <i class="material-icons">people</i> Clients</a>
+        </li>
+        <li class="sub-menu"  toggle-class="active">
+            <a href="" ng-click="hCtrl.toggleDrop($event)">
+                <i class="material-icons">business</i>Companies
+                <span class="pull-right"><i class="material-icons">expand_more</i></span></a>
+
+            <ul class="animated hide">
+                <li>
+                    <a class="active" href="#/Companies/list">List</a>
+                    <a class="active" href="#/Companies/add">Add</a>
+                    <a class="active" href="#/Companies/update">Update</a>
+                    <a class="active" href="#/Companies/search">Search</a>
+                    <a class="active" href="#/Companies/delete">Delete</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sub-menu" toggle-class="active">
+            <a href="" ng-click="hCtrl.toggleDrop($event)">
+                <i class="material-icons">business</i>Brands
+                <span class="pull-right"><i class="material-icons">expand_more</i></span></a>
+
+            <ul class="animated hide">
+                <li>
+                    <a class="active" href="#/Brands/list">List</a>
+                    <a class="active" href="#/Brands/add">Add</a>
+                    <a class="active" href="#/Brands/update">Update</a>
+                    <a class="active" href="#/Brands/search">Search</a>
+                    <a class="active" href="#/Brands/delete">Delete</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sub-menu" toggle-class="active">
+            <a href="" ng-click="hCtrl.toggleDrop($event)">
+                <i class="glyphicon glyphicon-list-alt" aria-hidden="true" style="left:14px"></i>Invoices
+                <span class="pull-right"><i class="material-icons">expand_more</i></span></a>
+
+            <ul class="animated hide">
+                <li>
+                    <a class="active" href="#/Invoices/list">List</a>
+                    <a class="active" href="#/Invoices/search">Search</a>
+                </li>
+            </ul>
+        </li>
+        <li class="sub-menu" toggle-class="active">
+            <a href="" ng-click="hCtrl.toggleDrop($event)">
+                <i class="material-icons">build</i>Parts
+                <span class="pull-right"><i class="material-icons">expand_more</i></span></a>
+
+            <ul class="animated hide">
+                <li>
+                    <a class="active" href="#/Parts/part">Parts List</a>
+                    <a class="active" href="#/Parts/model">Model List</a>
+                    <a class="active" href="#/Parts/repair">Repair List</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</aside>

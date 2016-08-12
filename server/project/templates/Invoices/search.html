@@ -1,0 +1,52 @@
+<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}">
+    <div class="card">
+        <div class="card-header">
+            <h2>Search Invoice <small>Invoice ID must be an integer
+            </small></h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <form role="form" class="ng-pristine ng-valid" ng-submit="mCtrl.searchInvoice()">
+                <div class="form-group fg-line">
+                    <label for="ID">Invoice ID</label>
+                    <input type="text" class="form-control input-sm" name="ID" id="ID" ng-model="$root.ID" placeholder="Enter Company ID">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm m-t-10 waves-effect">Search</button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="card" style="display:none" id="searchResults">
+        <div class="card-header">
+            <h2>Matching Invoice <small></small></h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Invoice ID</th>
+                    <th>Company ID</th>
+                    <th>Company Name</th>
+                    <th>Serial No</th>
+                    <th>Date</th>
+                    <th>Total Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{mCtrl.InvoiceList[0].id}}</td>
+                    <td>{{mCtrl.InvoiceList[0].company_id}}</td>
+                    <td>{{mCtrl.InvoiceList[0]._name}}</td>
+                    <td>{{mCtrl.InvoiceList[0].serial_no}}</td>
+                    <td>{{mCtrl.InvoiceList[0].date}}</td>
+                    <td>{{mCtrl.InvoiceList[0].total_value}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
