@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Warehouse Admin Panel</title>
+  <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css"/>
+  <link rel="stylesheet" href="/stylesheets/animate.css"/>
+  <link rel="stylesheet" href="/stylesheets/fullcalendar.css">
+  <link rel="stylesheet" href="/stylesheets/material-design-iconic-font.min.css">
+  <link rel="stylesheet" href="/stylesheets/style.css"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+  <script src="/javascripts/jquery-1.12.3.min.js"></script>
+  <script src="/javascripts/bootstrap.min.js"></script>
+</head>
+<body ng-app="app">
+
+<header id="header" ng-include="'/templates/header.html'" ng-controller="HeaderCtrl as hCtrl"></header>
+
+<section id="mainTemplate" ng-controller="MainCtrl as mCtrl">
+  <!--template-->
+  <ng-view></ng-view>
+  <!--template-->
+</section>
+
+<div id="preloader" class="preloader pl-lg" ng-show="$root.layout.loading">
+  <svg class="pl-circular" viewBox="25 25 50 50">
+    <circle class="plc-path" cx="50" cy="50" r="20"></circle>
+  </svg>
+</div>
+<script src="/javascripts/moment.min.js" type="text/javascript"></script>
+<script src="/javascripts/fullcalendar.min.js" type="text/javascript"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js" type="text/javascript"></script>
+<script src="/javascripts/angular-route.min.js"></script>
+<script src="/javascripts/app.js"></script>
+<script src="/javascripts/controller.js"></script>
+<script src="/javascripts/directives.js"></script>
+<script src="/javascripts/services.js"></script>
+</body>
+</html>
