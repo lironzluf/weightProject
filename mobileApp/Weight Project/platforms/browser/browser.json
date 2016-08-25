@@ -1,0 +1,28 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cz.blocshop.socketsforcordova": {
+            "PACKAGE_NAME": "com.netanya.project.weight"
+        }
+    },
+    "dependent_plugins": {},
+    "modules": [
+        {
+            "file": "plugins/cz.blocshop.socketsforcordova/socket.js",
+            "id": "cz.blocshop.socketsforcordova.Socket",
+            "pluginId": "cz.blocshop.socketsforcordova",
+            "clobbers": [
+                "window.Socket"
+            ]
+        }
+    ],
+    "plugin_metadata": {
+        "cz.blocshop.socketsforcordova": "1.1.0"
+    }
+}
