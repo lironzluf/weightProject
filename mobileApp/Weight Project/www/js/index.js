@@ -17,7 +17,7 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-      var socket = new Socket();
+      socket = new Socket();
 
       socket.onData = function(data){
         console.log(data);
@@ -75,9 +75,11 @@ var app = {
       var connectedElement = parentElement.querySelector('.failed');
       var receivedElement = parentElement.querySelector('.received');
       var errMsg = parentElement.querySelector('.errmsg');
+
       receivedElement.setAttribute('style', 'display:none;');
       connectedElement.setAttribute('style', 'display:block;');
       errMsg.setAttribute('style','display:block');
+
       errMsg.innerText = err.toString();
       socket.close();
     }
