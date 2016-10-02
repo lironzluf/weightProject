@@ -97,7 +97,7 @@ angular.module('weightapp.controllers', [])
         chars.push(String.fromCharCode(data[i]));
       }
       var dataString = chars.join("");
-      dataString.split(/(?:\r\n|\r|\n)/g).forEach(handleData);
+      dataString.split(/(?:\r\n|\r|\n)/g).forEach($scope.handleData);
   };
 
   $scope.handleData = function(data){
