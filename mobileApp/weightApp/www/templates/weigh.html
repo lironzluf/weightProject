@@ -4,11 +4,11 @@
       <div ng-show="isConnected" class="button button-clear button-positive">CONNECTED TO INDICATOR</div>
       <div ng-show="!isConnected" class="button button-clear button-assertive">DISCONNECTED FROM INDICATOR</div>
       <img src="img/forklift.png"/>
-      <div class="weight">{{weight}}
-        <div class="kg">KG</div></div>
-      <div class="buttons">
-        <button class="button button-large button-assertive" ng-click="tare()">TARE</button>
-        <button class="button button-large button-assertive" ng-click="getWeight()">GET WEIGHT</button>
+      <div class="weight">{{isConnected ? weight : '----'}}
+        <div class="kg" ng-hide="!isConnected">KG</div></div>
+      <div class="weigh-buttons">
+        <button class="button button-large button-assertive" ng-disabled="!isConnected" ng-click="tare()">TARE</button>
+        <button class="button button-large button-assertive" ng-disabled="!isConnected" ng-click="getWeight()">GET WEIGHT</button>
       </div>
     </div>
   </ion-content>

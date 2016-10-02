@@ -10,38 +10,45 @@ angular.module('weightapp.controllers', [])
   //});
 
   $scope.socket = {};
-  $scope.host = '192.168.0.100';
+  $scope.host = '192.168.0.102';
   $scope.port = 2101;
   $scope.isConnected = false;
   $scope.weight = 0;
+  $scope.firstTime = true;
+  $scope.data = '';
 
   $scope.connectToHost = function(host,port){
-    $scope.socket = new Socket();
-    $scope.socket.onData = $scope.receiveData;
-    $scope.socket.onError = function(errorMessage) {
-      alert("Error occured, error: " + errorMessage);
-    };
-    $scope.socket.onClose = function(hasError) {
-      console.log("Socket closed, hasErrors=" + hasError);
-      $scope.setDisconnected();
-    };
-    $scope.socket.open(
-      host,
-      port,
-      $scope.setConnected,
-      function(errorMessage) {
-        alert("Error during connection, error: " + errorMessage);
-      });
+    if (typeof Socket === 'function') {
+      $scope.socket = new Socket();
+      $scope.socket.onData = $scope.receiveData;
+      $scope.socket.onError = function (errorMessage) {
+        alert("Error occured, error: " + errorMessage);
+      };
+      $scope.socket.onClose = function (hasError) {
+        console.log("Socket closed, hasErrors=" + hasError);
+        $scope.setDisconnected();
+      };
+      $scope.socket.open(
+        host,
+        port,
+        $scope.setConnected,
+        function (errorMessage) {
+          alert("Error during connection, error: " + errorMessage);
+        });
+    }
+    else {
+      console.log('Socket is undefined');
+    }
   };
 
   $scope.setConnected = function(){
     $scope.isConnected = true;
-    console.log('connected to host');
+    console.log('connected to host ' + $scope.host + ' on port ' + $scope.port);
   };
 
   $scope.setDisconnected = function(){
     $scope.isConnected = false;
-    console.log('disconnected from host');
+    console.log('disconnected from host ' + $scope.host + ' on port ' + $scope.port);
   };
 
   // Form data for the login modal
@@ -83,12 +90,19 @@ angular.module('weightapp.controllers', [])
   };
 
   $scope.sendCommand = function(command){
-    var bytes = new Uint8Array(command.length + 1);
-    for (var i = 0; i < command.length; i++) {
-      bytes[i] = command.charCodeAt(i);
+    try {
+      var bytes = new Uint8Array(command.length + 1);
+      for (var i = 0; i < command.length; i++) {
+        bytes[i] = command.charCodeAt(i);
+      }
+      bytes[command.length] = "\r\n".charCodeAt(0);
+      $scope.socket.write(bytes, function () {
+       // alert('sent successfully');
+      }, function (e) {
+        alert('error: ' + e)
+      });
     }
-    bytes[command.length] = "\n".charCodeAt(0);
-    socket.write(bytes);
+    catch (e){ alert('Exception: ' + e);}
   };
 
   $scope.receiveData = function(data){
@@ -97,21 +111,43 @@ angular.module('weightapp.controllers', [])
         chars.push(String.fromCharCode(data[i]));
       }
       var dataString = chars.join("");
-      dataString.split(/(?:\r\n|\r|\n)/g).forEach($scope.handleData);
+      //dataString.split(/(?:\r\n|\r|\n)/g).forEach($scope.handleData);
+      $scope.concatData(dataString.replace(/(?:\r\n|\r|\n)/g,''));
+      if ($scope.firstTime) {
+        $scope.firstTime = false;
+        $timeout(function(){
+          $scope.handleData();
+        },300);
+      }
   };
 
-  $scope.handleData = function(data){
-    if(data && data.length > 0) {
-      if (data.indexOf('+') === 0) {
-        data.slice(1);
-        if (!isNaN(data)) {
-          $scope.weight = parseInt(data);
+  $scope.concatData = function(data){
+    //if ($scope.data.length > 0) {
+      $scope.data += data;
+    //}
+  };
+
+  $scope.handleData = function(){
+    if($scope.data && $scope.data.length > 0) {
+      if ($scope.data.indexOf('N+') === 0) {
+        $scope.data = $scope.data.substring(2);
+        if (!isNaN($scope.data)) {
+          $scope.weight = parseInt($scope.data);
         }
       }
-      else if (data.toLowerCase().indexOf('OK') > -1) {
+      else if ($scope.data.indexOf('+') === 0) {
+        $scope.data = $scope.data.substring(1);
+        if (!isNaN($scope.data)) {
+          $scope.weight = parseInt($scope.data);
+        }
+      }
+      else if ($scope.data.toLowerCase().indexOf('ok') > -1) {
         $scope.weight = 0;
       }
+      $scope.$apply();
     }
+    $scope.firstTime = true;
+    $scope.data = '';
   };
 
   $scope.getWeight = function(){
@@ -133,4 +169,11 @@ angular.module('weightapp.controllers', [])
       catch (e){}
     }
   };
+
+  $scope.saveSettings = function(host,port) {
+    $scope.host = host;
+    $scope.port = port;
+    console.log(host +': ' + port);
+    $state.go('app.start');
+  }
 });

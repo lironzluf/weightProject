@@ -57,6 +57,15 @@ angular.module('weightapp', ['ionic', 'weightapp.controllers'])
       },
       controller: 'AppCtrl'
     })
+    .state('app.settings', {
+      url: '/settings',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/settings.html'
+        }
+      },
+      controller: 'AppCtrl'
+    })
     .state('app.statistics', {
       url: '/statistics',
       views: {
