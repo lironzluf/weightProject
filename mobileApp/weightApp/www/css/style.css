@@ -1,0 +1,116 @@
+body{
+  background:rgb(249,253,255);
+  padding:0;
+  margin:0;
+  color:rgb(21,25,34);
+  font-family: 'Lato', sans-serif;
+}
+.bar.bar-stable{
+  background: #ff3019; /* Old browsers */
+  background: -moz-linear-gradient(top,  #ff3019 0%, #cf0404 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #ff3019 0%,#cf0404 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #ff3019 0%,#cf0404 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+.bar.bar-stable .title{
+  color:#fff;
+}
+.bar-stable .button.button-clear{
+  color:#fff;
+}
+.outer-circle{
+  -webkit-box-sizing:content-box;
+  box-sizing:content-box;
+  border-radius: 50%;
+  width: 260px;
+  height:260px;
+  padding:10px;
+  border:2px solid #efefef;
+  /* width and height can be anything, as long as they're equal */
+  text-align:center;
+  margin:0 auto;
+  background: #eee; /* Old browsers */
+  background: -moz-linear-gradient(top,  #fff 0%, #efefef 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #fff 0%,#efefef 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #fff 0%,#efefef 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+}
+.circle {
+  -webkit-box-sizing:content-box;
+  box-sizing:content-box;
+  border-radius: 50%;
+  width:260px;
+  height:260px;
+  margin:0px auto;
+  border:2px solid #cf0404;
+  /* width and height can be anything, as long as they're equal */
+  background: #ff3019; /* Old browsers */
+  background: -moz-linear-gradient(top,  #ff3019 0%, #cf0404 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #ff3019 0%,#cf0404 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #ff3019 0%,#cf0404 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  -webkit-box-shadow: 0px 15px 61px -15px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 15px 61px -15px rgba(0,0,0,0.75);
+  box-shadow: 0px 15px 61px -15px rgba(0,0,0,0.75);
+}
+
+.circle:active{
+  background: -moz-linear-gradient(top,  #cf0404 0%, #ff3019 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #cf0404 0%, #ff3019 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #cf0404 0%, #ff3019 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+.circle img{
+  text-align:center;
+  margin:40px auto 30px auto;
+}
+
+.container{
+  width:95%;
+  margin:20px auto;
+  text-align:center;
+}
+
+.circle div{
+  color:#fff;
+  font-size:35px;
+}
+
+.start{
+  font-weight:300;
+  line-height:40px;
+}
+
+.weighing{
+  font-weight:800;
+}
+
+.statistics h1{
+  text-align:left;
+  margin-top:15px;
+  font-size:25px;
+}
+.thin{
+  font-weight:100;
+}
+
+.statistics img {
+  width:100%;
+  max-width:300px;
+}
+.weight{
+  color: #cf0404;
+  width: 280px;
+  margin: 5px auto;
+  font-size: 80px;
+  line-height: 80px;
+  font-weight: 800;
+}
+.kg{
+  color:#cf0404;
+  font-size:35px;
+  line-height:22px;
+  text-align:right;
+  font-weight:800;
+}
+.buttons{
+  margin-top:30px;
+}

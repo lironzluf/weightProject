@@ -1,0 +1,15 @@
+<ion-view view-title="WEIGHING">
+  <ion-content>
+    <div class="container">
+      <div ng-show="isConnected" class="button button-clear button-positive">CONNECTED TO INDICATOR</div>
+      <div ng-show="!isConnected" class="button button-clear button-assertive">DISCONNECTED FROM INDICATOR</div>
+      <img src="../img/forklift.png"/>
+      <div class="weight">{{weight}}
+        <div class="kg">KG</div></div>
+      <div class="buttons">
+        <button class="button button-large button-assertive" ng-click="tare()">TARE</button>
+        <button class="button button-large button-assertive" ng-click="getWeight()">GET WEIGHT</button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
