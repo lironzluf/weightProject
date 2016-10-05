@@ -1,0 +1,25 @@
+<ion-view view-title="WEIGHING">
+  <ion-content>
+    <div class="container">
+      <div ng-show="isConnected" class="button button-clear button-positive">CONNECTED TO INDICATOR</div>
+      <div ng-show="!isConnected" class="button button-clear button-assertive">
+        DISCONNECTED FROM INDICATOR
+        <button class="button button-small button-assertive" ng-click="goToSettings()">Change Settings</button>
+      </div>
+      <div class="clearfix"></div>
+      <div>
+        <img src="img/forklift.png" style="margin: 50px 0 0 0"/>
+        <div class="weight">{{isConnected ? weight : '----'}}
+          <div class="kg" ng-hide="!isConnected">KG</div>
+        </div>
+      </div>
+      <div class="weigh-buttons">
+        <button class="button button-light button-assertive" ng-disabled="!isConnected" ng-click="tare()">TARE</button>
+        <button class="button button-light button-assertive" ng-disabled="!isConnected" ng-click="getWeight()">GET WEIGHT</button>
+      </div>
+      <div class="action-buttons">
+        <button class="button button-light button-assertive" ng-disabled="!isConnected" ng-click="sendWeight()">SEND WEIGHT</button>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

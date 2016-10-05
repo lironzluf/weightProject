@@ -1,0 +1,15 @@
+<ion-view view-title="SETTINGS">
+  <ion-content>
+    <div class="list">
+      <label class="item item-input">
+        IP Address: &nbsp;&nbsp;<input type="text" placeholder="IP Address" ng-model="host" style="height:47px;">
+      </label>
+      <label class="item item-input">
+        PORT: &nbsp;&nbsp;<input type="text" placeholder="Last Name" ng-model="port" style="height:47px;">
+      </label>
+    </div>
+    <div class="container">
+      <button class="button button-assertive" ng-click="saveSettings(host,port)">SAVE</button>
+    </div>
+  </ion-content>
+</ion-view>
