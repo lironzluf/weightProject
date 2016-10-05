@@ -39,6 +39,24 @@ angular.module('weightapp', ['ionic', 'weightapp.controllers'])
       },
       controller: 'AppCtrl'
     })
+    .state('app.taskSelection', {
+      url: '/taskSelection',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/taskSelection.html'
+        }
+      },
+      controller: 'AppCtrl'
+    })
+    .state('app.task', {
+      url: '/task',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/task.html'
+        }
+      },
+      controller: 'AppCtrl'
+    })
     .state('app.weigh', {
       url: '/weigh',
       views: {

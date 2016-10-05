@@ -1,0 +1,17 @@
+<ion-view view-title="TASKS">
+  <ion-content>
+    <div class="container">
+      <div ng-show="tasks.length > 0">
+        <b>Select a task:</b><br/><br/>
+        <ion-list>
+          <ion-item ng-repeat="task in tasks" ng-click="selectTask($index)">
+            {{task.id}}
+          </ion-item>
+        </ion-list>
+      </div>
+      <div ng-show="tasks.length === 0">
+        <b>There are no avialable tasks.</b>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>
