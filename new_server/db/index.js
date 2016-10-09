@@ -4,7 +4,7 @@ mongoose.connect('mongodb://weigher:dbpassword@ds153785.mlab.com:53785/weight-pr
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  // we're connected!
+  // connected!
   console.log('connected to mongolab database');
 });
 
