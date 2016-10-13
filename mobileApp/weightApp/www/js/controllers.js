@@ -26,7 +26,22 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $scope.tasks[0] = {id: 123, items: ['0001','0002']};
       $scope.tasks[1] = {id: 124, items: ['0001','0002']};
 
-      // TODO: get localStorage user-data
+      if (localStorage.userId) {
+        $scope.userId = localStorage.userId;
+        console.log('Found userId in localStorage: ' + $scope.userId);
+        AppFactory.loginUserById($scope.userId)
+          .success(function(data){
+            console.log(data);
+            if (data.status) {
+              $scope.user = data.user;
+              $state.go('app.taskSelection');
+            }
+            else {
+              $scope.userId = -1;
+              $state.go('app.login');
+            }
+          })
+      }
 
     };
 
@@ -50,20 +65,30 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
       var userId = $scope.loginData.userId;
       var password = $scope.loginData.password;
-      if (userId.length > 0 & password.length > 0) {
+      if (userId && password && userId.length > 0 & password.length > 0) {
         AppFactory.loginUser(userId, password)
           .success(function(data){
             console.log(data);
             if (data.status) {
+              $scope.userId = data.user._id;
+              $scope.user = data.user;
               $state.go('app.taskSelection');
+              $scope.loginResult = 'Logged In Successfully';
+
+              localStorage.userId = $scope.userId;
+            }
+            else {
+              $scope.loginResult = 'Incorrect Username or Password';
             }
           })
           .error(function(e){
             console.log(e);
+            $scope.loginResult = 'Error Logging In';
           });
       }
-
-      // TODO: set localStorage user-data
+      else {
+        $scope.loginResult = 'Please fill in these required fields';
+      }
 
       //debug
       /*

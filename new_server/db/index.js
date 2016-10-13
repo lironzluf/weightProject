@@ -1,14 +1,16 @@
 var mongoose = require('mongoose');
+var Promise = require('promise');
 mongoose.connect('mongodb://weigher:dbpassword@ds153785.mlab.com:53785/weight-project');
 
 var db = mongoose.connection;
 
 var usersSchema = mongoose.Schema({
-  userId: String,
-  password: String
+  userName: String,
+  password: String,
+  securityLevel: String
 });
 
-var Users = mongoose.model('Users', usersSchema);
+var Users = mongoose.model('users', usersSchema);
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -21,17 +23,46 @@ module.exports = {
 
     },
 
-  getUserLogin: function (userId, password) {
-
-      var query = Users.findOne({'userId': userId, 'password': password});
+  getUserLogin: function (userName, password) {
+    /*Users.find(function (err,users){
+     if (err) return console.error();
+     console.log(users);
+     });*/
+    return new Promise(function (resolve, reject) {
+      var query = Users.findOne({'userName': userName, 'password': password});
 
       query.exec(function (err, user) {
         if (err) {
           console.log(err);
-          return false;
+          reject(err);
         }
-        return user !== null;
+        if (user != null) {
+          resolve(user);
+        }
+        else {
+          reject("No matching user found");
+        }
       });
+    });
+  },
+
+  getUserById: function(userId) {
+    return new Promise(function (resolve, reject) {
+      var query = Users.findOne({'_id': userId});
+
+      query.exec(function (err, user) {
+        if (err) {
+          console.log(err);
+          reject(err);
+        }
+        if (user != null) {
+          resolve(user);
+        }
+        else {
+          reject("No matching user found");
+        }
+      });
+    });
   }
 };
 

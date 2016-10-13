@@ -4,6 +4,7 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../db');
+var Promise = require('promise');
 /* GET home page. */
 router.get('/', function(req, res, next) {
 
@@ -11,17 +12,33 @@ router.get('/', function(req, res, next) {
 
 router.post('/login', function(req,res){
   console.info('new login request!');
-  var userId = req.body.userId;
+  var userName = req.body.userName;
   var password = req.body.password;
-  console.log('userId: ' + userId + ', password: ' + password);
+  console.log('userName: ' + userName + ', password: ' + password);
   var resObj = {status:false};
-  if (db.getUserLogin(userId,password)) {
+  db.getUserLogin(userName,password)
+    .done(function(user){
     resObj.status = true;
+    resObj.user = user;
     res.json(resObj);
-  }
-  else {
+  },function(err){
     res.json(resObj);
-  }
+  });
+});
+
+router.post('/loginbyid', function(req,res){
+  console.info('new login request!');
+  var userId = req.body.userId;
+  console.log('userId: ' + userId);
+  var resObj = {status:false};
+  db.getUserById(userId)
+    .done(function(user){
+      resObj.status = true;
+      resObj.user = user;
+      res.json(resObj);
+    },function(err){
+      res.json(resObj);
+    });
 });
 
 /** Liron:

@@ -4,14 +4,24 @@
 angular.module('weightapp.factory', [])
   .factory('AppFactory', function($http) {
       return {
-        loginUser: function(userId,password){
+        loginUser: function(userName,password){
           return $http({ // ajax http call
             method: 'POST',
             url: 'http://localhost:3000/users/login',
             cache: false,
             data: {
-              userId: userId,
+              userName: userName,
               password: password
+            }
+          });
+        },
+        loginUserById: function(userId){
+          return $http({ // ajax http call
+            method: 'POST',
+            url: 'http://localhost:3000/users/loginbyid',
+            cache: false,
+            data: {
+              userId: userId
             }
           });
         }
