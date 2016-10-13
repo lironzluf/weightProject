@@ -1,11 +1,11 @@
-<ion-view view-title="TASKS">
+<ion-view view-title="TASKS" hide-back-button="true">
   <ion-content>
     <div class="container">
       <div ng-show="tasks.length > 0">
         <b>Select a task:</b><br/><br/>
         <ion-list>
           <ion-item ng-repeat="task in tasks" ng-click="selectTask($index)">
-            {{task.id}}
+            {{task.id}} <span class="task-started" ng-show="task.inProgress">- In Progress</span>
           </ion-item>
         </ion-list>
       </div>

@@ -1,6 +1,6 @@
-angular.module('weightapp.controllers', [])
+angular.module('weightapp.controllers', ['weightapp.factory'])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, $state) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, $state, $ionicHistory, AppFactory) {
 
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -9,21 +9,96 @@ angular.module('weightapp.controllers', [])
     //$scope.$on('$ionicView.enter', function(e) {
     //});
 
-    // defaults
-    $scope.socket = {};
-    $scope.host = '192.168.0.102';
-    $scope.port = 2101;
-    $scope.isConnected = false;
-    $scope.weight = 0;
-    $scope.firstTime = true;
-    $scope.data = '';
-    $scope.tasks = [];
-
     $scope.initApp = function(){
-      $scope.tasks[0] = {id: 123};
+
+      // defaults
+      $scope.socket = {};
+      $scope.host = '192.168.0.102';
+      $scope.port = 2101;
+      $scope.isConnected = false;
+      $scope.weight = 0;
+      $scope.firstTime = true;
+      $scope.data = '';
+      $scope.tasks = [];
+      $scope.userId = -1;
+
+      //debug
+      $scope.tasks[0] = {id: 123, items: ['0001','0002']};
+      $scope.tasks[1] = {id: 124, items: ['0001','0002']};
+
+      if (localStorage.userId) {
+        $scope.userId = localStorage.userId;
+        console.log('Found userId in localStorage: ' + $scope.userId);
+        AppFactory.loginUserById($scope.userId)
+          .success(function(data){
+            console.log(data);
+            if (data.status) {
+              $scope.user = data.user;
+              $state.go('app.taskSelection');
+            }
+            else {
+              $scope.userId = -1;
+              $state.go('app.login');
+            }
+          })
+      }
+
     };
 
     $scope.initApp();
+
+    $scope.$on('$ionicView.enter', function(e) {
+      if ($scope.userId === -1) {
+
+        $ionicHistory.nextViewOptions({
+          disableBack: true
+        });
+
+        // show login template
+        $scope.loginData = {};
+        $state.go('app.login');
+
+      }
+    });
+
+    $scope.doLogin = function(){
+
+      var userId = $scope.loginData.userId;
+      var password = $scope.loginData.password;
+      if (userId && password && userId.length > 0 & password.length > 0) {
+        AppFactory.loginUser(userId, password)
+          .success(function(data){
+            console.log(data);
+            if (data.status) {
+              $scope.userId = data.user._id;
+              $scope.user = data.user;
+              $state.go('app.taskSelection');
+              $scope.loginResult = 'Logged In Successfully';
+
+              localStorage.userId = $scope.userId;
+            }
+            else {
+              $scope.loginResult = 'Incorrect Username or Password';
+            }
+          })
+          .error(function(e){
+            console.log(e);
+            $scope.loginResult = 'Error Logging In';
+          });
+      }
+      else {
+        $scope.loginResult = 'Please fill in these required fields';
+      }
+
+      //debug
+      /*
+      $scope.userId = 1;
+
+      $timeout(function(){
+        $state.go('app.taskSelection');
+      },1000)
+      */
+    };
 
     $scope.connectToHost = function (host, port) {
       if (typeof Socket === 'function') {
@@ -59,35 +134,7 @@ angular.module('weightapp.controllers', [])
       console.log('disconnected from host ' + $scope.host + ' on port ' + $scope.port);
     };
 
-    /*
-    // Create the login modal that we will use later
-    $ionicModal.fromTemplateUrl('templates/login.html', {
-      scope: $scope
-    }).then(function (modal) {
-      $scope.modal = modal;
-    });
 
-    // Triggered in the login modal to close it
-    $scope.closeLogin = function () {
-      $scope.modal.hide();
-    };
-
-    // Open the login modal
-    $scope.login = function () {
-      $scope.modal.show();
-    };
-
-    // Perform the login action when the user submits the login form
-    $scope.doLogin = function () {
-      console.log('Doing login', $scope.loginData);
-
-      // Simulate a login delay. Remove this and replace with your login
-      // code if using a login system
-      $timeout(function () {
-        $scope.closeLogin();
-      }, 1000);
-    };
-    */
     $scope.startWeighing = function () {
       $state.go('app.weigh');
       if (!$scope.isConnected) { // CONNECT TO HOST IF NOT ALREADY CONNECTED
@@ -122,6 +169,7 @@ angular.module('weightapp.controllers', [])
       $scope.concatData(dataString.replace(/(?:\r\n|\r|\n)/g, ''));
       if ($scope.firstTime) {
         $scope.firstTime = false;
+        // indicator sends the weight in two "waves" separated by about 100msec each
         $timeout(function () {
           $scope.handleData();
         }, 300);
@@ -184,7 +232,41 @@ angular.module('weightapp.controllers', [])
       var selectedTask = $scope.tasks[index];
       if (selectedTask) {
         $scope.currentTask = selectedTask;
+        $scope.currentItemIdx = 0;
         $state.go('app.task');
       }
     };
+
+    $scope.sendWeight = function(){
+      var weight = $scope.weight,
+          dbWeight;
+
+      // debugging
+      dbWeight = $scope.weight * 1.01;
+
+
+      // TODO: http request get weight
+
+
+      if (Math.abs(1 - (weight / dbWeight)) < 0.1) {
+        window.alert("Incorrect weight, please try again");
+      }
+      else {
+        $scope.tasks.forEach(function(task) {
+          if (task === $scope.currentTask) {
+            task.inProgress = true;
+            // TODO: http update task as in progress
+          }
+        });
+        if ($scope.currentItemIdx === $scope.currentTask.items.length - 1) {
+          window.alert("Task finished!");
+          $state.go('app.taskSelection');
+        }
+        else {
+          $scope.currentItemIdx++;
+          $scope.arrivedAtLocation = false;
+          $scope.$apply();
+        }
+      }
+    }
   });
