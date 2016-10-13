@@ -16,10 +16,11 @@ router.post('/login', function(req,res){
   console.log('userId: ' + userId + ', password: ' + password);
   var resObj = {status:false};
   if (db.getUserLogin(userId,password)) {
-    res.status(200);
+    resObj.status = true;
+    res.json(resObj);
   }
   else {
-    res.status(500);
+    res.json(resObj);
   }
 });
 

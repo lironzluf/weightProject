@@ -54,7 +54,9 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         AppFactory.loginUser(userId, password)
           .success(function(data){
             console.log(data);
-            $state.go('app.taskSelection');
+            if (data.status) {
+              $state.go('app.taskSelection');
+            }
           })
           .error(function(e){
             console.log(e);
