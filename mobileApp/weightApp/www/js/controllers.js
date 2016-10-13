@@ -1,6 +1,6 @@
-angular.module('weightapp.controllers', [])
+angular.module('weightapp.controllers', ['weightapp.factory'])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, $state) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, $state, $ionicHistory, AppFactory) {
 
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -25,9 +25,80 @@ angular.module('weightapp.controllers', [])
       //debug
       $scope.tasks[0] = {id: 123, items: ['0001','0002']};
       $scope.tasks[1] = {id: 124, items: ['0001','0002']};
+
+      if (localStorage.userId) {
+        $scope.userId = localStorage.userId;
+        console.log('Found userId in localStorage: ' + $scope.userId);
+        AppFactory.loginUserById($scope.userId)
+          .success(function(data){
+            console.log(data);
+            if (data.status) {
+              $scope.user = data.user;
+              $state.go('app.taskSelection');
+            }
+            else {
+              $scope.userId = -1;
+              $state.go('app.login');
+            }
+          })
+      }
+
     };
 
     $scope.initApp();
+
+    $scope.$on('$ionicView.enter', function(e) {
+      if ($scope.userId === -1) {
+
+        $ionicHistory.nextViewOptions({
+          disableBack: true
+        });
+
+        // show login template
+        $scope.loginData = {};
+        $state.go('app.login');
+
+      }
+    });
+
+    $scope.doLogin = function(){
+
+      var userId = $scope.loginData.userId;
+      var password = $scope.loginData.password;
+      if (userId && password && userId.length > 0 & password.length > 0) {
+        AppFactory.loginUser(userId, password)
+          .success(function(data){
+            console.log(data);
+            if (data.status) {
+              $scope.userId = data.user._id;
+              $scope.user = data.user;
+              $state.go('app.taskSelection');
+              $scope.loginResult = 'Logged In Successfully';
+
+              localStorage.userId = $scope.userId;
+            }
+            else {
+              $scope.loginResult = 'Incorrect Username or Password';
+            }
+          })
+          .error(function(e){
+            console.log(e);
+            $scope.loginResult = 'Error Logging In';
+          });
+      }
+      else {
+        $scope.loginResult = 'Please fill in these required fields';
+      }
+
+      //debug
+      /*
+      $scope.userId = 1;
+
+      $timeout(function(){
+        $state.go('app.taskSelection');
+      },1000)
+      */
+    };
 
     $scope.connectToHost = function (host, port) {
       if (typeof Socket === 'function') {
