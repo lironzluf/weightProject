@@ -1,6 +1,6 @@
-angular.module('weightapp.controllers', [])
+angular.module('weightapp.controllers', ['weightapp.factory'])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, $state) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, $state, $ionicHistory, AppFactory) {
 
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
@@ -25,9 +25,53 @@ angular.module('weightapp.controllers', [])
       //debug
       $scope.tasks[0] = {id: 123, items: ['0001','0002']};
       $scope.tasks[1] = {id: 124, items: ['0001','0002']};
+
+      // TODO: get localStorage user-data
+
     };
 
     $scope.initApp();
+
+    $scope.$on('$ionicView.enter', function(e) {
+      if ($scope.userId === -1) {
+
+        $ionicHistory.nextViewOptions({
+          disableBack: true
+        });
+
+        // show login template
+        $scope.loginData = {};
+        $state.go('app.login');
+
+      }
+    });
+
+    $scope.doLogin = function(){
+
+      var userId = $scope.loginData.userId;
+      var password = $scope.loginData.password;
+      if (userId.length > 0 & password.length > 0) {
+        AppFactory.loginUser(userId, password)
+          .success(function(data){
+            console.log(data);
+            $state.go('app.taskSelection');
+          })
+          .error(function(e){
+            console.log(e);
+          });
+      }
+
+      // TODO: set localStorage user-data
+
+      //debug
+      /*
+      $scope.userId = 1;
+
+      $timeout(function(){
+        $state.go('app.taskSelection');
+      },1000)
+      */
+    };
 
     $scope.connectToHost = function (host, port) {
       if (typeof Socket === 'function') {

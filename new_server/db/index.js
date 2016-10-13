@@ -2,11 +2,36 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://weigher:dbpassword@ds153785.mlab.com:53785/weight-project');
 
 var db = mongoose.connection;
+
+var users = mongoose.Schema({
+  userName: String,
+  password: String
+});
+
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   // connected!
   console.log('connected to mongolab database');
 });
+
+module.exports = {
+  getUserTasks: function (userId) {
+
+    },
+
+  getUserLogin: function (userId, password) {
+      var query = users.findOne({'userId': userId, 'password': password});
+
+      query.exec(function (err, user) {
+        if (err) {
+          console.log(err);
+          return false;
+        }
+        //console.log(user);
+        return user !== null;
+      });
+  }
+};
 
 /** Liron:
  *  Here goes all the database queries and the definition of the schemes
