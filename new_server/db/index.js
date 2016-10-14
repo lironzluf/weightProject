@@ -10,7 +10,26 @@ var usersSchema = mongoose.Schema({
   securityLevel: String
 });
 
+var itemsSchema = mongoose.Schema({
+  sku: Number,
+  itemName: String,
+  amount: Number,
+  weight: Number,
+  location: String
+});
+
+var ordersSchema = mongoose.Schema({
+  orderNumber: Number,
+  sku: Number,
+  userName: String,
+  amount: Number,
+  status : String
+});
+
+
+var Items = mongoose.model('items', itemsSchema);
 var Users = mongoose.model('users', usersSchema);
+var Orders = mongoose.model('orders', ordersSchema);
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -19,51 +38,55 @@ db.once('open', function() {
 });
 
 module.exports = {
-  getUserTasks: function (userId) {
+  UserFunctions: {
+    getUserTasks: function (userId) {
 
     },
 
-  getUserLogin: function (userName, password) {
-    /*Users.find(function (err,users){
-     if (err) return console.error();
-     console.log(users);
-     });*/
-    return new Promise(function (resolve, reject) {
-      var query = Users.findOne({'userName': userName, 'password': password});
+    getUserLogin: function (userName, password) {
+      /*Users.find(function (err,users){
+       if (err) return console.error();
+       console.log(users);
+       });*/
+      return new Promise(function (resolve, reject) {
+        var query = Users.findOne({'userName': userName, 'password': password});
 
-      query.exec(function (err, user) {
-        if (err) {
-          console.log(err);
-          reject(err);
-        }
-        if (user != null) {
-          resolve(user);
-        }
-        else {
-          reject("No matching user found");
-        }
+        query.exec(function (err, user) {
+          if (err) {
+            console.log(err);
+            reject(err);
+          }
+          if (user != null) {
+            resolve(user);
+          }
+          else {
+            reject("No matching user found");
+          }
+        });
       });
-    });
+    },
+
+    getUserById: function (userId) {
+      return new Promise(function (resolve, reject) {
+        var query = Users.findOne({'_id': userId});
+
+        query.exec(function (err, user) {
+          if (err) {
+            console.log(err);
+            reject(err);
+          }
+          if (user != null) {
+            resolve(user);
+          }
+          else {
+            reject("No matching user found");
+          }
+        });
+      });
+    }
   },
-
-  getUserById: function(userId) {
-    return new Promise(function (resolve, reject) {
-      var query = Users.findOne({'_id': userId});
-
-      query.exec(function (err, user) {
-        if (err) {
-          console.log(err);
-          reject(err);
-        }
-        if (user != null) {
-          resolve(user);
-        }
-        else {
-          reject("No matching user found");
-        }
-      });
-    });
-  }
+  ItemFunctions: {},
+  OrderFunctions: {}
 };
 
 /** Liron:
