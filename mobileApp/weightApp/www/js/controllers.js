@@ -2,13 +2,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
   .controller('AppCtrl', function ($scope, $ionicModal, $timeout, $state, $ionicHistory, AppFactory) {
 
-    // With the new view caching in Ionic, Controllers are only called
-    // when they are recreated or on app start, instead of every page change.
-    // To listen for when this page is active (for example, to refresh data),
-    // listen for the $ionicView.enter event:
-    //$scope.$on('$ionicView.enter', function(e) {
-    //});
-
     $scope.initApp = function(){
 
       // defaults
@@ -21,10 +14,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $scope.data = '';
       $scope.tasks = [];
       $scope.userId = -1;
-
-      //debug
-      $scope.tasks[0] = {id: 123, items: ['0001','0002']};
-      $scope.tasks[1] = {id: 124, items: ['0001','0002']};
 
       if (localStorage.userId) {
         $scope.userId = localStorage.userId;
@@ -41,6 +30,14 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $state.go('app.login');
             }
           })
+      }
+
+      if (localStorage.host){
+        $scope.host = localStorage.host;
+      }
+
+      if (localStorage.port){
+        $scope.port = localStorage.port;
       }
 
     };
@@ -224,6 +221,8 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
     $scope.saveSettings = function (host, port) {
       $scope.host = host;
       $scope.port = port;
+      localStorage.host = host;
+      localStorage.port = port;
       console.log('Setings saved, connection is set to: ' + host + ':' + port);
       $state.go('app.start');
     };
