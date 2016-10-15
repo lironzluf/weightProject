@@ -1,12 +1,12 @@
 angular.module('weightapp.controllers', ['weightapp.factory'])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $state, $ionicHistory, AppFactory) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicHistory, $ionicPopup, $timeout, $state, $ionicHistory, AppFactory) {
 
     $scope.initApp = function(){
 
       // defaults
       $scope.socket = {};
-      $scope.host = '192.168.0.102';
+      $scope.host = '192.168.0.101';
       $scope.port = 2101;
       $scope.isConnected = false;
       $scope.weight = 0;
@@ -300,7 +300,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       localStorage.host = host;
       localStorage.port = port;
       console.log('Setings saved, connection is set to: ' + host + ':' + port);
-      $state.go('app.start');
+      $ionicHistory.goBack();
     };
 
     $scope.selectTask = function(index){
@@ -331,8 +331,11 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
     $scope.sendWeight = function(){
       var weight = $scope.weight,
           dbWeight = $scope.currentTask[$scope.currentItemIdx].weight;
-
-      if (Math.abs(1 - (weight / dbWeight)) < 0.1) {
+      console.log('weight: ' + weight);
+      console.log('dbWeight: ' + dbWeight);
+      console.log('weight/dbWeight: ' + parseFloat(weight)/parseFloat(dbWeight));
+      console.log('result: ' + Math.abs(1 - (parseFloat(weight) / parseFloat(dbWeight))));
+      if (Math.abs(1 - (parseFloat(weight) / parseFloat(dbWeight))) > 1.5) {
         $scope.alertPopup("Incorrect weight", "Please try again");
       }
       else {
@@ -362,14 +365,17 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         }
         else {
           $scope.currentItemIdx++;
-          $scope.$apply();
+          $state.go('app.task');
+          //$scope.$apply();
         }
       }
     };
 
     $scope.initTasks = function(){
-      console.log('1');
       if ($scope.userId !== -1 && $scope.user) {
+        $ionicHistory.nextViewOptions({
+          disableBack: false
+        });
         AppFactory.getOrdersByUsername($scope.user.userName)
           .success(function(data){
             if (data.status){
