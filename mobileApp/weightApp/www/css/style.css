@@ -120,3 +120,9 @@ body{
 .task-started{
   color:green;
 }
+.loading-animation{
+  text-align:center;
+}
+.loading-animation img{
+  width:50px;
+}

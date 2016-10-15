@@ -42,6 +42,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $scope.data = '';
       $scope.tasks = [];
       $scope.userId = -1;
+      $scope.loading = true;
 
       if (localStorage.userId) {
         $scope.userId = localStorage.userId;
@@ -443,6 +444,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      * description:
      */
     $scope.selectTask = function (index) {
+      $scope.loading=true;
       var selectedTaskId = $scope.tasks[index];
       if (selectedTaskId) {
         $scope.currentTaskId = selectedTaskId;
@@ -450,6 +452,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
         AppFactory.getOrderData(selectedTaskId)
           .success(function (data) {
+            $scope.loading=false;
             if (data.status) {
               $scope.currentTask = data.data;
               console.log('Got task data!');
@@ -459,8 +462,10 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             else {
               console.log('Task not found');
             }
+
           })
           .error(function (e) {
+            $scope.loading=false;
             console.log(e);
           });
 
@@ -527,9 +532,11 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             else {
               console.log('No tasks');
             }
+            $scope.loading=false;
           })
           .error(function (e) {
             console.log(e);
+            $scope.loading=false;
           });
       }
     };
