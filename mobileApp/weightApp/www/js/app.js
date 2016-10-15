@@ -18,8 +18,8 @@ angular.module('weightapp', ['ionic', 'weightapp.controllers', 'weightapp.factor
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
-    }	
-  });  
+    }
+  });
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -112,5 +112,5 @@ angular.module('weightapp', ['ionic', 'weightapp.controllers', 'weightapp.factor
       controller: 'AppCtrl'
     });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/start');
+  $urlRouterProvider.otherwise('/app/taskSelection');
 });
