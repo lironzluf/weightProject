@@ -40,6 +40,20 @@ router.post('/loginbyid', function(req,res){
     });
 });
 
+router.post('/loginbynfc', function(req,res){
+  console.info('new login request! (by nfc!!!)');
+  var nfc = req.body.nfc;
+  var resObj = {status:false};
+  db.UserFunctions.getUserLoginByNFC(nfc)
+    .done(function(user){
+    resObj.status = true;
+    resObj.user = user;
+    res.json(resObj);
+  },function(err){
+    res.json(resObj);
+  });
+});
+
  router.post('/showallusers', function(req,res){
 	 //return all information from users collection
   var resObj = {status:false};

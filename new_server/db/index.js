@@ -87,6 +87,25 @@ module.exports = {
       });
     },
 	
+	getUserLoginByNFC: function (nfc) {      
+      return new Promise(function (resolve, reject) {
+        var query = Users.findOne({'nfc': nfc});
+
+        query.exec(function (err, user) {
+          if (err) {
+            console.log(err);
+            reject(err);
+          }
+          if (user != null) {
+            resolve(user);
+          }
+          else {
+            reject("No matching user found");
+          }
+        });
+      });
+    },
+	
 	showAllUsers: function() {	  
      return new Promise(function (resolve, reject) {
 		var query = Users.find();
