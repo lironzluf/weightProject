@@ -1,7 +1,24 @@
 angular.module('weightapp.controllers', ['weightapp.factory'])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicHistory, $ionicPopup, $timeout, $state, $ionicHistory, AppFactory) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicHistory, $ionicPopup, $timeout, $state, $ionicHistory, AppFactory,$ionicPlatform) {
 
+	$ionicPlatform.ready(function() {
+		nfc.addTagDiscoveredListener (
+			function (nfcEvent) {
+				var tag = nfcEvent.tag;					
+				var tagId = nfc.bytesToHexString(tag.id);
+				alert('NFC Detected');
+				$scope.doLoginByNFC(tagId);
+			},
+			function () { // success callback
+				//alert("Waiting for NDEF tag");
+			},
+			function (error) { // error callback
+				alert("Error adding NDEF listener " + JSON.stringify(error));
+			}
+		);
+	});
+  
     $scope.initApp = function(){
 
       // defaults
@@ -99,8 +116,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       */
     };
 	
-	$scope.doLoginByNFC = function(){
-		//nfc = tagId from app.js		
+	$scope.doLoginByNFC = function(nfc){		
         AppFactory.loginUserByNFC(nfc)
           .success(function(data){
             console.log(data);

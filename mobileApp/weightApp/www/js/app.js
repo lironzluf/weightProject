@@ -19,19 +19,6 @@ angular.module('weightapp', ['ionic', 'weightapp.controllers', 'weightapp.factor
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }	
-	nfc.addTagDiscoveredListener (
-		function (nfcEvent) {
-			var tag = nfcEvent.tag;					
-			var tagId = nfc.bytesToHexString(tag.id);
-			alert(tagId);
-		},
-		function () { // success callback
-			//alert("Waiting for NDEF tag");
-		},
-		function (error) { // error callback
-			alert("Error adding NDEF listener " + JSON.stringify(error));
-		}
-	);
   });  
 })
 
