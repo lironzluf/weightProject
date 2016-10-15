@@ -340,8 +340,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       }
       else {
 
-        $scope.alertPopup("Correct weight", "Proceeding to next item");
-
         if ($scope.currentItemIdx === $scope.currentTask.length - 1) {
 
           $state.go('app.taskSelection');
@@ -349,7 +347,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             .success(function(data){
               if (data.status) {
                 $scope.initTasks();
-                $scope.alertPopup("Task Finished");
+                $scope.alertPopup("Task Finished", "Great Job!");
               }
               else {
                 $scope.alertPopup("Error", "Error updating task. Please try again.");
@@ -361,6 +359,8 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             });
         }
         else {
+
+          $scope.alertPopup("Correct weight", "Proceeding to next item");
           $scope.currentItemIdx++;
           $state.go('app.task');
           //$scope.$apply();
