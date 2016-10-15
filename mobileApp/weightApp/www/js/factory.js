@@ -52,7 +52,7 @@ angular.module('weightapp.factory', [])
             cache: false,
             data: {
               orderNumber: orderId,
-              status: 1
+              status: 0
             }
           });
         }
