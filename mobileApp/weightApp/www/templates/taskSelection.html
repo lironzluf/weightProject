@@ -5,7 +5,7 @@
         <b>Select a task:</b><br/><br/>
         <ion-list>
           <ion-item ng-repeat="task in tasks" ng-click="selectTask($index)">
-            {{task}} <span class="task-started" ng-show="task.inProgress">- In Progress</span>
+            {{task}}
           </ion-item>
         </ion-list>
       </div>
