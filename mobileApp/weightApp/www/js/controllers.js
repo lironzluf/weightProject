@@ -5,9 +5,9 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
     /**
      * nfc :: Event Handler
      * description:
-     */
-    if (typeof(nfc) === "function") {
-      $ionicPlatform.ready(function () {
+     */    
+	 if (window.cordova) {
+      $ionicPlatform.ready(function () {	
         nfc.addTagDiscoveredListener(
           function (nfcEvent) {
             var tag = nfcEvent.tag;
@@ -16,14 +16,14 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             $scope.doLoginByNFC(tagId);
           },
           function () { // success callback
-            //alert("Waiting for NDEF tag");
+           // alert("Waiting for NDEF tag");
           },
           function (error) { // error callback
             alert("Error adding NDEF listener " + JSON.stringify(error));
           }
-        );
+        );	  
       });
-    }
+	 }
 
 
     /**
