@@ -7,7 +7,8 @@ var db = mongoose.connection;
 var usersSchema = mongoose.Schema({
   userName: String,
   password: String,
-  securityLevel: String
+  securityLevel: String,
+  nfc: String
 });
 
 var itemsSchema = mongoose.Schema({

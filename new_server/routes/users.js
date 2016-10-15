@@ -88,7 +88,7 @@ router.post('/showuserdetailsbyusername', function(req,res){
 
 router.post('/insertnewuser', function(req,res){
 	 //insert new user	
-  var user = {"userName" : req.body.userName, "password" : md5(req.body.password), "securityLevel" : req.body.securityLevel}
+  var user = {"userName" : req.body.userName, "password" : md5(req.body.password), "securityLevel" : req.body.securityLevel,"nfc" : req.body.nfc}
   var resObj = {status:false};
   db.UserFunctions.insertNewUser(user)
     .done(function(data){
@@ -116,7 +116,7 @@ router.post('/deleteuser', function(req,res){
 
 router.post('/updateuserbyusername', function(req,res){
 	 //update username 
-  var user = {"userName" : req.body.userName, "password" :  md5(req.body.password), "securityLevel" : req.body.securityLevel}
+  var user = {"userName" : req.body.userName, "password" :  md5(req.body.password), "securityLevel" : req.body.securityLevel,"nfc" : req.body.nfc}
   var resObj = {status:false};
   db.UserFunctions.updateUserByUserName(user)
     .done(function(data){
