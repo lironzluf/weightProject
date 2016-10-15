@@ -1,6 +1,6 @@
 angular.module('weightapp.controllers', ['weightapp.factory'])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $timeout, $state, $ionicHistory, AppFactory) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicPopup, $timeout, $state, $ionicHistory, AppFactory) {
 
     $scope.initApp = function(){
 
@@ -24,6 +24,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             if (data.status) {
               $scope.user = data.user;
               $state.go('app.taskSelection');
+              $scope.initTasks();
             }
             else {
               $scope.userId = -1;
@@ -73,6 +74,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $scope.loginResult = 'Logged In Successfully';
 
               localStorage.userId = $scope.userId;
+              $scope.initTasks();
             }
             else {
               $scope.loginResult = 'Incorrect Username or Password';
@@ -132,11 +134,85 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
     };
 
 
-    $scope.startWeighing = function () {
-      $state.go('app.weigh');
+    $scope.connectToIndicator = function(){
       if (!$scope.isConnected) { // CONNECT TO HOST IF NOT ALREADY CONNECTED
         $scope.connectToHost($scope.host, $scope.port);
       }
+    };
+
+    $scope.alertPopup = function(title,subtitle){
+      var alertPopup = $ionicPopup.alert({
+        title: title,
+        template: subtitle,
+        buttons: [
+          {
+            text: 'OK',
+            type:'button-assertive'
+          }
+        ]
+      });
+
+      alertPopup.then(function(res) {
+       // console.log('Thank you for not eating my delicious ice cream cone');
+      });
+    };
+
+    $scope.showLocationPopup = function(){
+      $scope.locations = {};
+      var myPopup = $ionicPopup.show({
+        template: '<input type="number" ng-model="locations.inputSku">',
+        title: 'Enter SKU Number',
+        //subTitle: 'SKU Number',
+        scope: $scope,
+        buttons: [
+          { text: 'Cancel' },
+          {
+            text: '<b>Check</b>',
+            type: 'button-assertive',
+            onTap: function(e){
+              if (!$scope.locations.inputSku){
+                e.preventDefault();
+              }
+              else {
+                return $scope.locations.inputSku;
+              }
+            }
+          }
+        ]
+      });
+
+      myPopup.then(function(res) {
+        if (!isNaN(res)) {
+          $scope.checkLocation(res);
+        }
+      });
+
+      $timeout(function() {
+        myPopup.close(); //close the popup after 10 seconds for some reason
+      }, 10000);
+    };
+
+    $scope.checkLocation = function(input){
+      if (input == $scope.currentTask[$scope.currentItemIdx].sku) {
+        console.log('sku ok');
+        $state.go('app.weighInTask');
+        console.log('weight should be: ' + $scope.currentTask[$scope.currentItemIdx].weight);
+        $scope.connectToIndicator();
+      }
+      else {
+        console.log('input sku: ' + input);
+        console.log('wrong sku, sku is: ' + $scope.currentTask[$scope.currentItemIdx].sku);
+        $scope.alertPopup("Wrong SKU","The SKU inserted is incorrect");
+      }
+    };
+
+    $scope.backToItem = function(){
+      $state.go('app.task');
+    };
+
+    $scope.startWeighing = function () {
+      $state.go('app.weigh');
+      $scope.connectToIndicator();
     };
 
     $scope.sendCommand = function (command) {
@@ -228,44 +304,86 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
     };
 
     $scope.selectTask = function(index){
-      var selectedTask = $scope.tasks[index];
-      if (selectedTask) {
-        $scope.currentTask = selectedTask;
+      var selectedTaskId = $scope.tasks[index];
+      if (selectedTaskId) {
+        $scope.currentTaskId = selectedTaskId;
         $scope.currentItemIdx = 0;
-        $state.go('app.task');
+
+        AppFactory.getOrderData(selectedTaskId)
+          .success(function(data){
+            if (data.status){
+              $scope.currentTask = data.data;
+              console.log('Got task data!');
+              console.log($scope.currentTask);
+              $state.go('app.task');
+            }
+            else {
+             console.log('Task not found');
+            }
+          })
+          .error(function(e){
+            console.log(e);
+          });
+
       }
     };
 
     $scope.sendWeight = function(){
       var weight = $scope.weight,
-          dbWeight;
-
-      // debugging
-      dbWeight = $scope.weight * 1.01;
-
-
-      // TODO: http request get weight
-
+          dbWeight = $scope.currentTask[$scope.currentItemIdx].weight;
 
       if (Math.abs(1 - (weight / dbWeight)) < 0.1) {
-        window.alert("Incorrect weight, please try again");
+        $scope.alertPopup("Incorrect weight", "Please try again");
       }
       else {
+        // update task to in-progress
         $scope.tasks.forEach(function(task) {
-          if (task === $scope.currentTask) {
+          if (task === $scope.currentTaskId) {
             task.inProgress = true;
-            // TODO: http update task as in progress
           }
         });
-        if ($scope.currentItemIdx === $scope.currentTask.items.length - 1) {
-          window.alert("Task finished!");
+
+        if ($scope.currentItemIdx === $scope.currentTask.length - 1) {
+
           $state.go('app.taskSelection');
+          AppFactory.setOrderAsFinished($scope.currentTaskId)
+            .success(function(data){
+              if (data.status) {
+                $scope.initTasks();
+              }
+              else {
+                $scope.alertPopup("Error", "Error updating task. Please try again.");
+              }
+            })
+            .error(function(e){
+              $scope.alertPopup("Error", "Error updating task. Please try again.");
+              console.log(e);
+            });
         }
         else {
           $scope.currentItemIdx++;
-          $scope.arrivedAtLocation = false;
           $scope.$apply();
         }
       }
-    }
+    };
+
+    $scope.initTasks = function(){
+      console.log('1');
+      if ($scope.userId !== -1 && $scope.user) {
+        AppFactory.getOrdersByUsername($scope.user.userName)
+          .success(function(data){
+            if (data.status){
+              console.log('Got new tasks');
+              console.log(data.data);
+             $scope.tasks = data.data;
+            }
+            else {
+              console.log('No tasks');
+            }
+          })
+          .error(function(e){
+            console.log(e);
+          });
+      }
+    };
   });

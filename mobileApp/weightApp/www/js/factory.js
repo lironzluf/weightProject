@@ -7,7 +7,7 @@ angular.module('weightapp.factory', [])
         loginUser: function(userName,password){
           return $http({ // ajax http call
             method: 'POST',
-            url: 'http://localhost:3000/users/login',
+            url: 'https://weightproject.herokuapp.com/users/login',
             cache: false,
             data: {
               userName: userName,
@@ -18,10 +18,41 @@ angular.module('weightapp.factory', [])
         loginUserById: function(userId){
           return $http({ // ajax http call
             method: 'POST',
-            url: 'http://localhost:3000/users/loginbyid',
+            url: 'https://weightproject.herokuapp.com/users/loginbyid',
             cache: false,
             data: {
               userId: userId
+            }
+          });
+        },
+        getOrdersByUsername: function(userName){
+          return $http({ // ajax http call
+            method: 'POST',
+            url: 'https://weightproject.herokuapp.com/orders/showallopenordernumberbyusername',
+            cache: false,
+            data: {
+              userName: userName
+            }
+          });
+        },
+        getOrderData: function(orderId){
+          return $http({ // ajax http call
+            method: 'POST',
+            url: 'https://weightproject.herokuapp.com/orders/showallopenordersbyordernumber',
+            cache: false,
+            data: {
+              orderNumber: orderId
+            }
+          });
+        },
+        setOrderAsFinished: function(orderId){
+          return $http({ // ajax http call
+            method: 'POST',
+            url: 'https://weightproject.herokuapp.com/orders/multiupdateorder',
+            cache: false,
+            data: {
+              orderNumber: orderId,
+              status: 1
             }
           });
         }

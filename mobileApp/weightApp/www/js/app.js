@@ -101,6 +101,15 @@ angular.module('weightapp', ['ionic', 'weightapp.controllers', 'weightapp.factor
         }
       },
       controller: 'AppCtrl'
+    })
+    .state('app.weighInTask', {
+      url: '/weighInTask',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/weighInTask.html'
+        }
+      },
+      controller: 'AppCtrl'
     });
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/start');

@@ -332,7 +332,7 @@ router.post('/updateorderitem', function(req,res){
   db.OrderFunctions.updateOrderItem(order)
     .done(function(data){
 		resObj.status = true;		
-		resObj.data = data
+		resObj.data = data;
 		res.json(resObj);
     },function(err){
 		res.json(resObj);
@@ -346,7 +346,7 @@ router.post('/multiupdateorder', function(req,res){
   db.OrderFunctions.multiUpdateOrder(order)
     .done(function(data){
 		resObj.status = true;		
-		resObj.data = data
+		resObj.data = data;
 		res.json(resObj);
     },function(err){
 		res.json(resObj);
