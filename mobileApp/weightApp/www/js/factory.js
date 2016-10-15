@@ -25,6 +25,16 @@ angular.module('weightapp.factory', [])
             }
           });
         },
+		loginUserByNFC: function(nfc){
+          return $http({ // ajax http call
+            method: 'POST',
+            url: 'https://weightproject.herokuapp.com/users/loginbynfc',
+            cache: false,
+            data: {
+              nfc: nfc
+            }
+          });
+        },
         getOrdersByUsername: function(userName){
           return $http({ // ajax http call
             method: 'POST',

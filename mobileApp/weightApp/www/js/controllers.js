@@ -58,7 +58,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
       }
     });
-
+	
     $scope.doLogin = function(){
 
       var userId = $scope.loginData.userId;
@@ -97,6 +97,30 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         $state.go('app.taskSelection');
       },1000)
       */
+    };
+	
+	$scope.doLoginByNFC = function(){
+		//nfc = tagId from app.js		
+        AppFactory.loginUserByNFC(nfc)
+          .success(function(data){
+            console.log(data);
+            if (data.status) {
+              $scope.userId = data.user._id;
+              $scope.user = data.user;
+              $state.go('app.taskSelection');
+              $scope.loginResult = 'Logged In Successfully';
+
+              localStorage.userId = $scope.userId;
+              $scope.initTasks();
+            }
+            else {
+              $scope.loginResult = 'Incorrect Username or Password';
+            }
+          })
+          .error(function(e){
+            console.log(e);
+            $scope.loginResult = 'Error Logging In';
+          });      
     };
 
     $scope.connectToHost = function (host, port) {
