@@ -335,7 +335,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       console.log('dbWeight: ' + dbWeight);
       console.log('weight/dbWeight: ' + parseFloat(weight)/parseFloat(dbWeight));
       console.log('result: ' + Math.abs(1 - (parseFloat(weight) / parseFloat(dbWeight))));
-      if (Math.abs(1 - (parseFloat(weight) / parseFloat(dbWeight))) > 1.5) {
+      if (Math.abs(1 - (parseFloat(weight) / parseFloat(dbWeight))) > 0.5) {
         $scope.alertPopup("Incorrect weight", "Please try again");
       }
       else {
@@ -353,6 +353,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             .success(function(data){
               if (data.status) {
                 $scope.initTasks();
+                $scope.alertPopup("Task Finished");
               }
               else {
                 $scope.alertPopup("Error", "Error updating task. Please try again.");
