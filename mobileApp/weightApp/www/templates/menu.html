@@ -33,6 +33,9 @@
         <ion-item menu-close href="#/app/about">
           About
         </ion-item>
+        <ion-item ng-show="userId !== -1" menu-close ng-click="logout()">
+          Logout
+        </ion-item>
       </ion-list>
     </ion-content>
   </ion-side-menu>

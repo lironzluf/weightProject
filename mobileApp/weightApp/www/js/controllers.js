@@ -1,24 +1,26 @@
 angular.module('weightapp.controllers', ['weightapp.factory'])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicHistory, $ionicPopup, $timeout, $state, $ionicHistory, AppFactory,$ionicPlatform) {
+  .controller('AppCtrl', function ($scope, $ionicModal, $ionicHistory, $ionicPopup, $timeout, $state, AppFactory, $ionicPlatform) {
 
-	$ionicPlatform.ready(function() {
-		nfc.addTagDiscoveredListener (
-			function (nfcEvent) {
-				var tag = nfcEvent.tag;					
-				var tagId = nfc.bytesToHexString(tag.id);
-				alert('NFC Detected');
-				$scope.doLoginByNFC(tagId);
-			},
-			function () { // success callback
-				//alert("Waiting for NDEF tag");
-			},
-			function (error) { // error callback
-				alert("Error adding NDEF listener " + JSON.stringify(error));
-			}
-		);
-	});
-  
+  if (typeof(nfc) === "function") {
+    $ionicPlatform.ready(function () {
+      nfc.addTagDiscoveredListener(
+        function (nfcEvent) {
+          var tag = nfcEvent.tag;
+          var tagId = nfc.bytesToHexString(tag.id);
+          $scope.alertPopup('NFC Detected');
+          $scope.doLoginByNFC(tagId);
+        },
+        function () { // success callback
+          //alert("Waiting for NDEF tag");
+        },
+        function (error) { // error callback
+          alert("Error adding NDEF listener " + JSON.stringify(error));
+        }
+      );
+    });
+  }
+
     $scope.initApp = function(){
 
       // defaults
@@ -75,7 +77,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
       }
     });
-	
+
     $scope.doLogin = function(){
 
       var userId = $scope.loginData.userId;
@@ -105,18 +107,9 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       else {
         $scope.loginResult = 'Please fill in these required fields';
       }
-
-      //debug
-      /*
-      $scope.userId = 1;
-
-      $timeout(function(){
-        $state.go('app.taskSelection');
-      },1000)
-      */
     };
-	
-	$scope.doLoginByNFC = function(nfc){		
+
+	$scope.doLoginByNFC = function(nfc){
         AppFactory.loginUserByNFC(nfc)
           .success(function(data){
             console.log(data);
@@ -136,7 +129,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
           .error(function(e){
             console.log(e);
             $scope.loginResult = 'Error Logging In';
-          });      
+          });
     };
 
     $scope.connectToHost = function (host, port) {
@@ -410,9 +403,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     $scope.initTasks = function(){
       if ($scope.userId !== -1 && $scope.user) {
-        $ionicHistory.nextViewOptions({
-          disableBack: false
-        });
         AppFactory.getOrdersByUsername($scope.user.userName)
           .success(function(data){
             if (data.status){
@@ -428,5 +418,15 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             console.log(e);
           });
       }
+    };
+
+
+    $scope.logout = function(){
+      $scope.userId = -1;
+      $scope.user = {};
+      $scope.loginResult = '';
+      localStorage.removeItem('userId');
+      $scope.alertPopup("Logged out successfully");
+      $state.go('app.login');
     };
   });
