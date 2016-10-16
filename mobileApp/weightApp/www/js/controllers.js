@@ -532,6 +532,41 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         );
       });
     }
+	
+	$scope.getGpsCoords = function() {
+		//for saving Coords inside the dataBase
+		navigator.geolocation.getCurrentPosition(
+			function(position) {
+				var latitude = position.coords.latitude;
+				var longitude = position.coords.longitude;
+				alert(latitude + " " + longitude);
+			},
+			function(error) {
+				alert('code: ' + error.code + '\n' +
+					'message: ' + error.message + '\n');
+			});
+	};
+
+	$scope.getGoogleMap = function(latitude, longitude) {
+		// get GoogleMap by coords
+		// before using: 
+		// should define div with id="map" and give it height,
+		// sometimes the background of body Causing problems.
+
+		var mapOptions = {
+			center: new google.maps.LatLng(0, 0),
+			zoom: 1,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+		map = new google.maps.Map(document.getElementById("map"), mapOptions);
+		var latLong = new google.maps.LatLng(latitude, longitude);
+		var marker = new google.maps.Marker({
+			position: latLong
+		});
+		marker.setMap(map);
+		map.setZoom(15);
+		map.setCenter(marker.getPosition());
+	};
 
     $scope.initApp();
   });
