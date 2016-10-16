@@ -5,7 +5,7 @@
   <ion-content>
     <div class="login-screen">
       <img src="img/logo-ravas.png"/>
-      <div style="padding:20%">
+      <div style="padding:20%" ng-show="userId === -1">
       <form ng-submit="doLogin()">
         <div class="list" style="background:none;">
           <label class="item item-input">
@@ -21,6 +21,10 @@
           </label>
         </div>
       </form>
+      </div>
+      <div style="padding:10%" ng-show="userId !== -1">
+        <h2 style="color:#fff">Hello {{user.userName}}!</h2>
+        <button class="button button-block button-assertive" ng-click="logout()">Logout</button>
       </div>
     </div>
 
