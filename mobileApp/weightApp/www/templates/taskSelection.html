@@ -1,4 +1,4 @@
-<ion-view view-title="TASKS" hide-back-button="true">
+<ion-view view-title="TASKS">
   <ion-content>
     <div class="container">
       <div ng-show="loading" class="loading-animation"><img src="img/loading.svg"/></div>
@@ -10,7 +10,7 @@
           </ion-item>
         </ion-list>
       </div>
-      <div ng-show="tasks.length === 0" ng-hide="loading">
+      <div ng-show="tasks.length == 0 && !loading">
         <b>There are no avialable tasks.</b>
       </div>
     </div>

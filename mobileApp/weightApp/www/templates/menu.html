@@ -8,6 +8,10 @@
         <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
         </button>
       </ion-nav-buttons>
+
+      <ion-nav-buttons side="right">
+        <img src="img/logout.png"  ng-show="userId !== -1" style="width:24px;height:24px;padding-top:10px;color:#fff;" ng-click="logout()"/>
+      </ion-nav-buttons>
     </ion-nav-bar>
     <ion-nav-view name="menuContent"></ion-nav-view>
   </ion-side-menu-content>
@@ -19,22 +23,19 @@
     <ion-content>
       <ion-list>
         <ion-item menu-close href="#/app/taskSelection">
-          Tasks
+          <img src="img/interface.png" style="vertical-align:-6px;padding-right:3px;"/> Tasks
         </ion-item>
         <ion-item menu-close href="#/app/start">
-          Free Weighing
+          <img src="img/free-weigh.png" style="vertical-align:-6px;padding-right:3px;"/> Free Weighing
         </ion-item>
         <ion-item menu-close href="#/app/settings">
-          Settings
+          <img src="img/settings.png" style="vertical-align:-6px;padding-right:3px;"/> Settings
         </ion-item>
         <ion-item menu-close href="#/app/statistics">
-          Statistics
+          <img src="img/arrow.png" style="vertical-align:-6px;padding-right:3px;"/> Statistics
         </ion-item>
         <ion-item menu-close href="#/app/about">
-          About
-        </ion-item>
-        <ion-item ng-show="userId !== -1" menu-close ng-click="logout()">
-          Logout
+          <img src="img/about-us.png" style="vertical-align:-6px;padding-right:3px;"/> About
         </ion-item>
       </ion-list>
     </ion-content>

@@ -8,11 +8,13 @@
         <button class="button button-small button-assertive" ng-click="backToItem()">Cancel</button>
       </div>
       <div class="clearfix"></div>
-      <div>
-        <img src="img/forklift.png" style="margin: 50px 0 0 0"/>
-        <div class="weight">{{isConnected ? weight : '----'}}
-          <div class="kg" ng-hide="!isConnected">KG</div>
+      <div style="background:#4E4D4D;margin:50px 0 0 0;border:4px solid #ef473a">
+        <div class="ravas-logo"><img src="img/logo-ravas.png" style="padding-top:5px;height:30px;"/></div>
+        <div class="weight-display">
+          <div class="weight">{{isConnected ? weight : '----'}}
+          </div>
         </div>
+        <div class="kg">kg</div>
       </div>
       <div class="weigh-buttons">
         <button class="button button-light button-assertive" ng-disabled="!isConnected" ng-click="tare()">TARE</button>

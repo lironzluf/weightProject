@@ -3,30 +3,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
   .controller('AppCtrl', function ($scope, $ionicModal, $ionicHistory, $ionicPopup, $timeout, $state, AppFactory, $ionicPlatform) {
 
     /**
-     * nfc :: Event Handler
-     * description:
-     */    
-	 if (window.cordova) {
-      $ionicPlatform.ready(function () {	
-        nfc.addTagDiscoveredListener(
-          function (nfcEvent) {
-            var tag = nfcEvent.tag;
-            var tagId = nfc.bytesToHexString(tag.id);
-            $scope.alertPopup('NFC Detected');
-            $scope.doLoginByNFC(tagId);
-          },
-          function () { // success callback
-           // alert("Waiting for NDEF tag");
-          },
-          function (error) { // error callback
-            alert("Error adding NDEF listener " + JSON.stringify(error));
-          }
-        );	  
-      });
-	 }
-
-
-    /**
      * initApp :: function
      * description:
      */
@@ -72,9 +48,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     };
 
-    $scope.initApp();
-
-
     /**
      * ionicView.enter :: Event Handler
      * description:
@@ -88,7 +61,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
       }
     });
-
 
     /**
      * doLogin :: function
@@ -106,25 +78,23 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $scope.userId = data.user._id;
               $scope.user = data.user;
               $state.go('app.taskSelection');
-              $scope.loginResult = 'Logged In Successfully';
 
               localStorage.userId = $scope.userId;
               $scope.initTasks();
             }
             else {
-              $scope.loginResult = 'Incorrect Username or Password';
+              $scope.alertPopup("Incorrect Username or Password");
             }
           })
           .error(function (e) {
             console.log(e);
-            $scope.loginResult = 'Error Logging In';
+            $scope.alertPopup("Error Logging In");
           });
       }
       else {
-        $scope.loginResult = 'Please fill in these required fields';
+        $scope.alertPopup("Please fill in these required fields");
       }
     };
-
 
     /**
      * doLoginByNFC :: function
@@ -152,7 +122,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
           $scope.loginResult = 'Error Logging In';
         });
     };
-
 
     /**
      * connectToHost :: function
@@ -191,7 +160,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       console.log('connected to host ' + $scope.host + ' on port ' + $scope.port);
     };
 
-
     /**
      * setDisconnected :: function
      * description:
@@ -200,7 +168,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $scope.isConnected = false;
       console.log('disconnected from host ' + $scope.host + ' on port ' + $scope.port);
     };
-
 
     /**
      * connectToIndicator :: function
@@ -211,7 +178,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         $scope.connectToHost($scope.host, $scope.port);
       }
     };
-
 
     /**
      * alertPopup :: function
@@ -233,7 +199,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         // console.log('Thank you for not eating my delicious ice cream cone');
       });
     };
-
 
     /**
      * showLocationPopup :: function
@@ -274,7 +239,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       }, 10000);
     };
 
-
     /**
      * checkLocation :: function
      * description:
@@ -293,7 +257,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       }
     };
 
-
     /**
      * backToItem :: function
      * description:
@@ -301,7 +264,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
     $scope.backToItem = function () {
       $state.go('app.task');
     };
-
 
     /**
      * startWeighing :: function
@@ -311,7 +273,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $state.go('app.weigh');
       $scope.connectToIndicator();
     };
-
 
     /**
      * sendCommand :: function
@@ -334,7 +295,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         alert('Exception: ' + e);
       }
     };
-
 
     /**
      * receiveData :: function
@@ -403,7 +363,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       }
     };
 
-
     /**
      * goToSettings :: function
      * description:
@@ -411,7 +370,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
     $scope.goToSettings = function () {
       $state.go('app.settings');
     };
-
 
     /**
      * tare :: function
@@ -423,7 +381,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         $scope.sendCommand('ST');
       }
     };
-
 
     /**
      * saveSettings :: function
@@ -437,7 +394,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       console.log('Setings saved, connection is set to: ' + host + ':' + port);
       $ionicHistory.goBack();
     };
-
 
     /**
      * selectTask :: function
@@ -549,9 +505,33 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $scope.userId = -1;
       $scope.user = {};
       $scope.loginData = {};
-      $scope.loginResult = '';
       localStorage.removeItem('userId');
       $scope.alertPopup("Logged out successfully");
       $state.go('app.login');
     };
+
+    /**
+     * nfc :: Event Handler
+     * description:
+     */
+    if (window.cordova) {
+      $ionicPlatform.ready(function () {
+        nfc.addTagDiscoveredListener(
+          function (nfcEvent) {
+            var tag = nfcEvent.tag;
+            var tagId = nfc.bytesToHexString(tag.id);
+            $scope.alertPopup('NFC Detected');
+            $scope.doLoginByNFC(tagId);
+          },
+          function () { // success callback
+            // alert("Waiting for NDEF tag");
+          },
+          function (error) { // error callback
+            alert("Error adding NDEF listener " + JSON.stringify(error));
+          }
+        );
+      });
+    }
+
+    $scope.initApp();
   });

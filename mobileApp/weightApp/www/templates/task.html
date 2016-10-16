@@ -1,6 +1,7 @@
 <ion-view view-title="GO TO LOCATION">
   <ion-content>
     <div class="container" ng-init="arrivedAtLocation = false">
+      <p class="grey">Item {{currentItemIdx+1}} of {{currentTask.length}}</p>
       <p>Please pick up the item from location:</p>
       <p>{{currentTask[currentItemIdx].location}}</p>
       <div class="weigh-buttons">
