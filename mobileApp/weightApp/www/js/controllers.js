@@ -19,7 +19,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $scope.tasks = [];
       $scope.userId = -1;
       $scope.loading = true;
-	  $scope.myWeights = [];
+      $scope.myWeights = [];
 
       if (localStorage.userId) {
         $scope.userId = localStorage.userId;
@@ -32,7 +32,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $scope.autoLoginMsg = "Hello " + $scope.user.userName + ", You have been logged in automatically";
               $state.go('app.taskSelection');
               $scope.initTasks();
-			  $scope.initMyWeights();
+              $scope.initMyWeights();
             }
             else {
               $scope.userId = -1;
@@ -84,7 +84,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
               localStorage.userId = $scope.userId;
               $scope.initTasks();
-			  $scope.initMyWeights();
+              $scope.initMyWeights();
             }
             else {
               $scope.alertPopup("Incorrect Username or Password");
@@ -116,7 +116,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
             localStorage.userId = $scope.userId;
             $scope.initTasks();
-			$scope.initMyWeights();
+            $scope.initMyWeights();
           }
           else {
             $scope.loginResult = 'Incorrect Username or Password';
@@ -405,7 +405,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      * description:
      */
     $scope.selectTask = function (index) {
-      $scope.loading=true;
+      $scope.loading = true;
       var selectedTaskId = $scope.tasks[index];
       if (selectedTaskId) {
         $scope.currentTaskId = selectedTaskId;
@@ -413,7 +413,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
         AppFactory.getOrderData(selectedTaskId)
           .success(function (data) {
-            $scope.loading=false;
+            $scope.loading = false;
             if (data.status) {
               $scope.currentTask = data.data;
               console.log('Got task data!');
@@ -426,7 +426,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
           })
           .error(function (e) {
-            $scope.loading=false;
+            $scope.loading = false;
             console.log(e);
           });
 
@@ -493,30 +493,30 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             else {
               console.log('No tasks');
             }
-            $scope.loading=false;
+            $scope.loading = false;
           })
           .error(function (e) {
             console.log(e);
-            $scope.loading=false;
+            $scope.loading = false;
           });
       }
     };
-	
-	$scope.initMyWeights = function () {
+
+    $scope.initMyWeights = function () {
       if ($scope.userId !== -1 && $scope.user) {
         AppFactory.showAllWeightsByUserName($scope.user.userName)
           .success(function (data) {
-            if (data.status) {             
+            if (data.status) {
               $scope.myWeights = data.data;
             }
             else {
-              console.log('No tasks');
+              console.log('No data in my weights');
             }
-            $scope.loading=false;
+            $scope.loading = false;
           })
           .error(function (e) {
             console.log(e);
-            $scope.loading=false;
+            $scope.loading = false;
           });
       }
     };
@@ -556,54 +556,62 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         );
       });
     }
-	
-	$scope.saveWeight = function() {
-		//saving free weight and location for user
-		// GPS must be open
-		navigator.geolocation.getCurrentPosition(
-			function(position) {
-				var latitude = position.coords.latitude;
-				var longitude = position.coords.longitude;				
-				AppFactory.insertNewWeight($scope.user.userName,$scope.weight,latitude,longitude)
-					.success(function(data) {
-						console.log(data);
-						if (data.status) {
-							 $scope.alertPopup("Saved successfully");
-						} else {
-						 $scope.alertPopup("Error");
-						}
-					})
-					.error(function(e) {
-						console.log(e);
-					 $scope.alertPopup("Error2");
-					});
-			},
-			function(error) {
-				alert('code: ' + error.code + '\n' +
-					'message: ' + error.message + '\n');
-			});
-	};
 
-	$scope.getGoogleMap = function(latitude, longitude) {
-		// get GoogleMap by coords
-		// before using: 
-		// should define div with id="map" and give it height,
-		// sometimes the background of body Causing problems.
+    /**
+     * saveWeight :: function
+     * description: Saving free weight and location for user
+     * GPS must be open
+     */
+    $scope.saveWeight = function () {
 
-		var mapOptions = {
-			center: new google.maps.LatLng(0, 0),
-			zoom: 1,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		};
-		map = new google.maps.Map(document.getElementById("map"), mapOptions);
-		var latLong = new google.maps.LatLng(latitude, longitude);
-		var marker = new google.maps.Marker({
-			position: latLong
-		});
-		marker.setMap(map);
-		map.setZoom(15);
-		map.setCenter(marker.getPosition());
-	};
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          var latitude = position.coords.latitude;
+          var longitude = position.coords.longitude;
+          AppFactory.insertNewWeight($scope.user.userName, $scope.weight, latitude, longitude)
+            .success(function (data) {
+              console.log(data);
+              if (data.status) {
+                $scope.alertPopup("Saved successfully");
+              } else {
+                $scope.alertPopup("Error");
+              }
+            })
+            .error(function (e) {
+              console.log(e);
+              $scope.alertPopup("Error2");
+            });
+        },
+        function (error) {
+          alert('code: ' + error.code + '\n' +
+            'message: ' + error.message + '\n');
+        });
+    };
+
+    /**
+     * getGoogleMap :: function
+     * description:   get GoogleMap by coords
+     * before using:
+     * should define div with id="map" and give it height,
+     * sometimes the background of body Causing problems.
+     * @param latitude
+     * @param longitude
+     */
+    $scope.getGoogleMap = function (latitude, longitude) {
+      var mapOptions = {
+        center: new google.maps.LatLng(0, 0),
+        zoom: 1,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+      map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      var latLong = new google.maps.LatLng(latitude, longitude);
+      var marker = new google.maps.Marker({
+        position: latLong
+      });
+      marker.setMap(map);
+      map.setZoom(15);
+      map.setCenter(marker.getPosition());
+    };
 
     $scope.initApp();
   });
