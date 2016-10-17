@@ -502,6 +502,9 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       }
     };
 
+    /**
+     *
+     */
     $scope.initMyWeights = function () {
       if ($scope.userId !== -1 && $scope.user) {
         AppFactory.showAllWeightsByUserName($scope.user.userName)
@@ -593,17 +596,24 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      * description:   get GoogleMap by coords
      * before using:
      * should define div with id="map" and give it height,
-     * sometimes the background of body Causing problems.   
-     */   	
-	$scope.selectWeight = function(index) {					
+     * sometimes the background of body Causing problems.
+     * @param index
+     */
+	$scope.selectWeight = function(index) {
 		var selectWeightId = $scope.myWeights[index];
 		if (selectWeightId) {
 			var latitude = selectWeightId.latitude;
 			var longitude = selectWeightId.longitude;
-			$scope.mapPopup(latitude, longitude);				
+			$scope.mapPopup(latitude, longitude);
 		}
 	};
 
+    /**
+     * mapPopup :: function
+     * description:
+     * @param latitude
+     * @param longitude
+     */
 	$scope.mapPopup = function(latitude, longitude) {
 		var mapPopup = $ionicPopup.alert({
 			title: "Google Map",
@@ -614,7 +624,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 			}]
 		});
 		mapPopup.then(function(res) {
-			// console.log('Thank you for not eating my delicious ice cream cone');					
+			// console.log('Thank you for not eating my delicious ice cream cone');
 		});
 		document.getElementsByClassName("popup")[0].style.maxHeight = '100%';
 		document.getElementsByClassName("popup")[0].style.height = '400px';
@@ -640,7 +650,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 			map.setZoom(8);
 			map.setCenter(marker.getPosition());
 		}, 0);
-	};	
+	};
 
     $scope.initApp();
   });
