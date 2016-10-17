@@ -27,10 +27,18 @@ var ordersSchema = mongoose.Schema({
   status : String
 });
 
+var weightsSchema = mongoose.Schema({
+    userName: String,
+    date: String,
+    weight : Number,
+    latitude: String,
+    longitude: String
+});
 
 var Items = mongoose.model('items', itemsSchema);
 var Users = mongoose.model('users', usersSchema);
 var Orders = mongoose.model('orders', ordersSchema);
+var Weights = mongoose.model('weights', weightsSchema);
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -496,6 +504,53 @@ module.exports = {
         });	
     });
   }  
-  }
-  
+  },
+  weightFunctions :{
+	insertNewWeight: function(arg) {		
+     return new Promise(function (resolve, reject) {		 
+	   var weight = new Weights(arg);
+		try {
+			weight.save(function (err, user) {
+				if (err || !user){
+					console.log(err);
+					reject(err);
+				}
+				resolve('ok');
+			});
+		}
+	   catch (e) { };      
+     });
+	},
+	deleteWeight: function(arg,arg2) {		
+     return new Promise(function (resolve, reject) {
+		Weights.remove({ "userName": arg , "date"  : arg2 }, function (err) {
+            if (!err) {
+                resolve('ok');
+            }
+            else {
+				console.log(err);
+				reject(err);
+			}
+        });	
+     });
+	},
+	showAllWeightsByUserName: function(arg) {	  
+     return new Promise(function (resolve, reject) {
+		var query = Weights.find({ 'userName': arg });
+
+		query.exec(function (err, data) {
+		if (err) {
+		  console.log(err);
+		  reject(err);
+		}
+		if (data != null) {
+		  resolve(data);
+		}
+		else {
+		  reject("No matching data found");
+		}
+	  });
+	 });
+	}
+  }  
 };

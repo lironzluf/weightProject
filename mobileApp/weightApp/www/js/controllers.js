@@ -19,6 +19,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $scope.tasks = [];
       $scope.userId = -1;
       $scope.loading = true;
+	  $scope.myWeights = [];
 
       if (localStorage.userId) {
         $scope.userId = localStorage.userId;
@@ -31,6 +32,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $scope.autoLoginMsg = "Hello " + $scope.user.userName + ", You have been logged in automatically";
               $state.go('app.taskSelection');
               $scope.initTasks();
+			  $scope.initMyWeights();
             }
             else {
               $scope.userId = -1;
@@ -82,6 +84,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
               localStorage.userId = $scope.userId;
               $scope.initTasks();
+			  $scope.initMyWeights();
             }
             else {
               $scope.alertPopup("Incorrect Username or Password");
@@ -113,6 +116,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
             localStorage.userId = $scope.userId;
             $scope.initTasks();
+			$scope.initMyWeights();
           }
           else {
             $scope.loginResult = 'Incorrect Username or Password';
@@ -497,6 +501,25 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
           });
       }
     };
+	
+	$scope.initMyWeights = function () {
+      if ($scope.userId !== -1 && $scope.user) {
+        AppFactory.showAllWeightsByUserName($scope.user.userName)
+          .success(function (data) {
+            if (data.status) {             
+              $scope.myWeights = data.data;
+            }
+            else {
+              console.log('No tasks');
+            }
+            $scope.loading=false;
+          })
+          .error(function (e) {
+            console.log(e);
+            $scope.loading=false;
+          });
+      }
+    };
 
     /**
      * logout :: function
@@ -533,6 +556,54 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         );
       });
     }
+	
+	$scope.saveWeight = function() {
+		//saving free weight and location for user
+		// GPS must be open
+		navigator.geolocation.getCurrentPosition(
+			function(position) {
+				var latitude = position.coords.latitude;
+				var longitude = position.coords.longitude;				
+				AppFactory.insertNewWeight($scope.user.userName,$scope.weight,latitude,longitude)
+					.success(function(data) {
+						console.log(data);
+						if (data.status) {
+							 $scope.alertPopup("Saved successfully");
+						} else {
+						 $scope.alertPopup("Error");
+						}
+					})
+					.error(function(e) {
+						console.log(e);
+					 $scope.alertPopup("Error2");
+					});
+			},
+			function(error) {
+				alert('code: ' + error.code + '\n' +
+					'message: ' + error.message + '\n');
+			});
+	};
+
+	$scope.getGoogleMap = function(latitude, longitude) {
+		// get GoogleMap by coords
+		// before using: 
+		// should define div with id="map" and give it height,
+		// sometimes the background of body Causing problems.
+
+		var mapOptions = {
+			center: new google.maps.LatLng(0, 0),
+			zoom: 1,
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		};
+		map = new google.maps.Map(document.getElementById("map"), mapOptions);
+		var latLong = new google.maps.LatLng(latitude, longitude);
+		var marker = new google.maps.Marker({
+			position: latLong
+		});
+		marker.setMap(map);
+		map.setZoom(15);
+		map.setCenter(marker.getPosition());
+	};
 
     $scope.initApp();
   });

@@ -102,6 +102,15 @@ angular.module('weightapp', ['ionic', 'weightapp.controllers', 'weightapp.factor
       },
       controller: 'AppCtrl'
     })
+	.state('app.myWeights', {
+      url: '/myWeights',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/myWeights.html'
+        }
+      },
+      controller: 'AppCtrl'
+    })
     .state('app.weighInTask', {
       url: '/weighInTask',
       views: {
