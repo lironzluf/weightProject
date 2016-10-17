@@ -28,6 +28,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             console.log(data);
             if (data.status) {
               $scope.user = data.user;
+              $scope.autoLoginMsg = "Hello " + $scope.user.userName + ", You have been logged in automatically";
               $state.go('app.taskSelection');
               $scope.initTasks();
             }

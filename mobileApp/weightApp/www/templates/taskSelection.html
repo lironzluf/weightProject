@@ -1,7 +1,10 @@
 <ion-view view-title="TASKS">
   <ion-content>
     <div class="container">
-      <div ng-show="loading" class="loading-animation"><img src="img/loading.svg"/></div>
+      <div ng-show="loading" class="loading-animation">
+        {{autoLoginMsg}}
+        <img src="img/loading.svg"/>
+      </div>
       <div ng-show="tasks.length > 0" ng-hide="loading">
         <b>Select a task:</b><br/><br/>
         <ion-list>
