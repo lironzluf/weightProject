@@ -19,6 +19,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $scope.tasks = [];
       $scope.userId = -1;
       $scope.loading = true;
+	  $scope.myWeights = [];
 
       if (localStorage.userId) {
         $scope.userId = localStorage.userId;
@@ -30,6 +31,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $scope.user = data.user;
               $state.go('app.taskSelection');
               $scope.initTasks();
+			  $scope.initMyWeights();
             }
             else {
               $scope.userId = -1;
@@ -81,6 +83,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
               localStorage.userId = $scope.userId;
               $scope.initTasks();
+			  $scope.initMyWeights();
             }
             else {
               $scope.alertPopup("Incorrect Username or Password");
@@ -112,6 +115,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
             localStorage.userId = $scope.userId;
             $scope.initTasks();
+			$scope.initMyWeights();
           }
           else {
             $scope.loginResult = 'Incorrect Username or Password';
@@ -484,6 +488,25 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               console.log('Got new tasks');
               console.log(data.data);
               $scope.tasks = data.data;
+            }
+            else {
+              console.log('No tasks');
+            }
+            $scope.loading=false;
+          })
+          .error(function (e) {
+            console.log(e);
+            $scope.loading=false;
+          });
+      }
+    };
+	
+	$scope.initMyWeights = function () {
+      if ($scope.userId !== -1 && $scope.user) {
+        AppFactory.showAllWeightsByUserName($scope.user.userName)
+          .success(function (data) {
+            if (data.status) {             
+              $scope.myWeights = data.data;
             }
             else {
               console.log('No tasks');

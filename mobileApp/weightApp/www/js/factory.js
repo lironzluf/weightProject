@@ -45,6 +45,17 @@ angular.module('weightapp.factory', [])
             }
           });
         },
+		showAllWeightsByUserName: function(userName){
+          return $http({ // ajax http call
+            method: 'POST',
+            //url: 'https://weightproject.herokuapp.com/weights/showallweightsbyusername',
+			url: 'https://weightproject1.herokuapp.com/weights/showallweightsbyusername',
+            cache: false,
+            data: {
+              userName: userName
+            }
+          });
+        },
         getOrderData: function(orderId){
           return $http({ // ajax http call
             method: 'POST',
