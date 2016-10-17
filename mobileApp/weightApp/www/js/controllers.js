@@ -533,13 +533,26 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       });
     }
 	
-	$scope.getGpsCoords = function() {
-		//for saving Coords inside the dataBase
+	$scope.saveWeight = function() {
+		//saving free weight and location for user
+		// GPS must be open
 		navigator.geolocation.getCurrentPosition(
 			function(position) {
 				var latitude = position.coords.latitude;
-				var longitude = position.coords.longitude;
-				alert(latitude + " " + longitude);
+				var longitude = position.coords.longitude;				
+				AppFactory.insertNewWeight($scope.user.userName,$scope.weight,latitude,longitude)
+					.success(function(data) {
+						console.log(data);
+						if (data.status) {
+							 $scope.alertPopup("Saved successfully");
+						} else {
+						 $scope.alertPopup("Error");
+						}
+					})
+					.error(function(e) {
+						console.log(e);
+					 $scope.alertPopup("Error2");
+					});
 			},
 			function(error) {
 				alert('code: ' + error.code + '\n' +

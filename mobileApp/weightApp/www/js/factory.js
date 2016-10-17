@@ -65,6 +65,20 @@ angular.module('weightapp.factory', [])
               status: 0
             }
           });
+        },
+		insertNewWeight: function(userName,weight,latitude,longitude){		
+          return $http({ // ajax http call
+            method: 'POST',
+            url: 'https://weightproject.herokuapp.com/weights/insertnewweight',			
+            cache: false,
+            data: {
+              userName: userName,
+              weight: weight,
+			  latitude: latitude,
+			  longitude: longitude,
+			  date: Date()
+            }
+          });
         }
       }
   });
