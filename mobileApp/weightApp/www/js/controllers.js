@@ -589,29 +589,63 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
     };
 
     /**
-     * getGoogleMap :: function
+     * selectWeight :: function
      * description:   get GoogleMap by coords
      * before using:
      * should define div with id="map" and give it height,
-     * sometimes the background of body Causing problems.
-     * @param latitude
-     * @param longitude
-     */
-    $scope.getGoogleMap = function (latitude, longitude) {
-      var mapOptions = {
-        center: new google.maps.LatLng(0, 0),
-        zoom: 1,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      };
-      map = new google.maps.Map(document.getElementById("map"), mapOptions);
-      var latLong = new google.maps.LatLng(latitude, longitude);
-      var marker = new google.maps.Marker({
-        position: latLong
-      });
-      marker.setMap(map);
-      map.setZoom(15);
-      map.setCenter(marker.getPosition());
-    };
+     * sometimes the background of body Causing problems.   
+     */   	
+	$scope.selectWeight = function(index) {
+		//$scope.loading = true;
+		var selectWeightId = $scope.myWeights[index];
+		if (selectWeightId) {
+			var latitude = selectWeightId.latitude;
+			var longitude = selectWeightId.longitude;
+			$scope.mapPopup(latitude, longitude);
+			//$scope.loading = false;
+			//$state.go('app.task');
+		}
+	};
+
+	$scope.mapPopup = function(latitude, longitude) {
+	    var mapPopup = $ionicPopup.alert({
+	        title: "Google Map",
+	        template: '<div></div>',
+	        buttons: [{
+	            text: 'OK',
+	            type: 'button-assertive'
+	        }]
+	    });
+	    mapPopup.then(function(res) {
+	        // console.log('Thank you for not eating my delicious ice cream cone');					
+	        document.getElementById('mapParent').appendChild(document.getElementById('map'));
+	    });
+	    document.getElementsByClassName("popup")[0].style.maxHeight = '100%';
+	    document.getElementsByClassName("popup")[0].style.height = '400px';
+	    document.getElementsByClassName("popup")[0].style.maxWidth = '100%';
+	    document.getElementsByClassName("popup")[0].style.width = '300px';
+	    document.getElementsByClassName("popup-body")[0].style.height = '100%';
+	    var mapOptions = {
+	        center: new google.maps.LatLng(0, 0),
+	        zoom: 1,
+	        mapTypeId: google.maps.MapTypeId.ROADMAP
+	    };
+	    map = new google.maps.Map(document.getElementById("map"), mapOptions);
+	    var latLong = new google.maps.LatLng(latitude, longitude);
+	    var marker = new google.maps.Marker({
+	        position: latLong
+	    });
+	    marker.setMap(map);
+	    map.setZoom(8);
+	    map.setCenter(marker.getPosition());
+	    setTimeout(function() {
+	        var newParent = document.getElementsByClassName("popup-body")[0];
+	        var oldParent = document.getElementById('mapParent');
+	        while (oldParent.childNodes.length > 0) {
+	            newParent.appendChild(oldParent.childNodes[0]);
+	        }
+	    }, 0);
+	};
 
     $scope.initApp();
   });

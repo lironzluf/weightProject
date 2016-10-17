@@ -8,7 +8,7 @@
                <div class="col"><b>Date</b></div>
                <div class="col"><b>Weight</b></div>
             </div>
-            <div class="row item" ng-repeat="myWeight in myWeights" ng-click="">
+            <div class="row item" ng-repeat="myWeight in myWeights" ng-click="selectWeight($index)">
                <div class="col">{{myWeight.date}}</div>
                <div class="col">{{myWeight.weight}}</div>
             </div>
@@ -16,6 +16,9 @@
          <div ng-show="myWeight.length == 0 && !loading">
             <b>There are no avialable weights.</b>
          </div>
+		 <div id="mapParent">
+		   <div id="map" style="height: 100%;"> </div>    
+          </div>
       </div>
    </ion-content>
 </ion-view>
