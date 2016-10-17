@@ -4,10 +4,6 @@
          <div ng-show="loading" class="loading-animation"><img src="img/loading.svg"/></div>
          <div ng-show="myWeight.length > 0" ng-hide="loading">
             <b>Select a row:</b><br/><br/>          
-            <div class="row">
-               <div class="col"><b>Date</b></div>
-               <div class="col"><b>Weight</b></div>
-            </div>
             <div class="row item" ng-repeat="myWeight in myWeights" ng-click="selectWeight($index)">
                <div class="col">{{myWeight.date}}</div>
                <div class="col">{{myWeight.weight}}</div>
