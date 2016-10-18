@@ -615,6 +615,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      * @param longitude
      */
 	$scope.mapPopup = function(latitude, longitude) {
+		navigator.vibrate(300);
 		var mapPopup = $ionicPopup.alert({
 			title: "Google Map",
 			template: '<div></div>',
