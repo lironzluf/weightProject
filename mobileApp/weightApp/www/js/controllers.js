@@ -494,6 +494,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               console.log('No tasks');
             }
             $scope.loading = false;
+            $scope.autoLoginMsg = '';
           })
           .error(function (e) {
             console.log(e);
