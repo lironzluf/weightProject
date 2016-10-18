@@ -593,17 +593,17 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * selectWeight :: function
-     * description:   get GoogleMap by coords    
+     * description:   get GoogleMap by coords
      * @param index
      */
-	$scope.selectWeight = function(index) {
-		var selectWeightId = $scope.myWeights[index];
-		if (selectWeightId) {
-			var latitude = selectWeightId.latitude;
-			var longitude = selectWeightId.longitude;
-			$scope.mapPopup(latitude, longitude);
-		}
-	};
+    $scope.selectWeight = function (index) {
+      var selectWeightId = $scope.myWeights[index];
+      if (selectWeightId) {
+        var latitude = selectWeightId.latitude;
+        var longitude = selectWeightId.longitude;
+        $scope.mapPopup(latitude, longitude);
+      }
+    };
 
     /**
      * mapPopup :: function
@@ -611,58 +611,58 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      * @param latitude
      * @param longitude
      */
-	$scope.mapPopup = function(latitude, longitude) {
-		navigator.vibrate(300);
-		var mapPopup = $ionicPopup.alert({
-			title: "Google Map",
-			template: '<div></div>',
-			buttons: [{
-				text: 'OK',
-				type: 'button-assertive'
-			}]
-		});
-		mapPopup.then(function(res) {
-			// console.log('Thank you for not eating my delicious ice cream cone');
-		});
-		document.getElementsByClassName("popup")[0].style.maxHeight = '100%';
-		document.getElementsByClassName("popup")[0].style.height = '400px';
-		document.getElementsByClassName("popup")[0].style.maxWidth = '100%';
-		document.getElementsByClassName("popup")[0].style.width = '300px';
-		document.getElementsByClassName("popup-body")[0].style.height = '100%';
-		setTimeout(function() {
-			var mapDiv = document.createElement("div");
-			mapDiv.setAttribute("id", "map");
-			mapDiv.style.height = '100%';
-			document.getElementsByClassName("popup-body")[0].appendChild(mapDiv);
-			var mapOptions = {
-				center: new google.maps.LatLng(0, 0),
-				zoom: 1,
-				mapTypeId: google.maps.MapTypeId.ROADMAP
-			};
-			var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-			var latLong = new google.maps.LatLng(latitude, longitude);
-			var marker = new google.maps.Marker({
-				position: latLong
-			});
-			marker.setMap(map);
-			map.setZoom(8);
-			map.setCenter(marker.getPosition());
-		}, 0);
-	};
-	/**
+    $scope.mapPopup = function (latitude, longitude) {
+      navigator.vibrate(300);
+      var mapPopup = $ionicPopup.alert({
+        title: "Google Map",
+        template: '<div></div>',
+        buttons: [{
+          text: 'OK',
+          type: 'button-assertive'
+        }]
+      });
+      mapPopup.then(function (res) {
+        // console.log('Thank you for not eating my delicious ice cream cone');
+      });
+      document.getElementsByClassName("popup")[0].style.maxHeight = '100%';
+      document.getElementsByClassName("popup")[0].style.height = '400px';
+      document.getElementsByClassName("popup")[0].style.maxWidth = '100%';
+      document.getElementsByClassName("popup")[0].style.width = '300px';
+      document.getElementsByClassName("popup-body")[0].style.height = '100%';
+      setTimeout(function () {
+        var mapDiv = document.createElement("div");
+        mapDiv.setAttribute("id", "map");
+        mapDiv.style.height = '100%';
+        document.getElementsByClassName("popup-body")[0].appendChild(mapDiv);
+        var mapOptions = {
+          center: new google.maps.LatLng(0, 0),
+          zoom: 1,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+        var latLong = new google.maps.LatLng(latitude, longitude);
+        var marker = new google.maps.Marker({
+          position: latLong
+        });
+        marker.setMap(map);
+        map.setZoom(8);
+        map.setCenter(marker.getPosition());
+      }, 0);
+    };
+    /**
      * takeScreenShotAndShare :: function
-     * description:   
+     * description:
      */
-	$scope.takeScreenShotAndShare = function () {
-		var imageLink;           
-		navigator.screenshot.save(function(error,res){
-			if(error){
-				console.error(error);
-			}else{           
-				imageLink = res.filePath;
-				window.plugins.socialsharing.share(null, null,'file://'+imageLink, null);          
-			}
-		},'jpg',50,'myScreenShot');
+    $scope.takeScreenShotAndShare = function () {
+      var imageLink;
+      navigator.screenshot.save(function (error, res) {
+        if (error) {
+          console.error(error);
+        } else {
+          imageLink = res.filePath;
+          window.plugins.socialsharing.share(null, null, 'file://' + imageLink, null);
+        }
+      }, 'jpg', 50, 'myScreenShot');
     };
 
     $scope.initApp();
