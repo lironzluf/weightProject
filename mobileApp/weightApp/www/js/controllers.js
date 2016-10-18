@@ -148,7 +148,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
           port,
           $scope.setConnected,
           function (errorMessage) {
-            alert("Error during connection, error: " + errorMessage);
+            $scope.alertPopup("Error during connection", "error: " + errorMessage);
           });
       }
       else {
