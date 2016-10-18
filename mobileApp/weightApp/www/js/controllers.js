@@ -652,6 +652,18 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 			map.setCenter(marker.getPosition());
 		}, 0);
 	};
+	
+	$scope.takeScreenShotAndShare = function () {
+		var imageLink;           
+		navigator.screenshot.save(function(error,res){
+		if(error){
+			console.error(error);
+		}else{           
+			imageLink = res.filePath;
+			window.plugins.socialsharing.share(null, null,'file://'+imageLink, null);          
+		}
+    },'jpg',50,'myScreenShot');
+    };
 
     $scope.initApp();
   });
