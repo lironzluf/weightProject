@@ -4,11 +4,11 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * initApp :: function
-     * description:
+     * description: Main function that initializes the app
      */
     $scope.initApp = function () {
 
-      // defaults
+      // defaults and inits
       $scope.socket = {};
       $scope.host = '192.168.0.101';
       $scope.port = 2101;
@@ -53,7 +53,8 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * ionicView.enter :: Event Handler
-     * description:
+     * description: Event Handler for view enter -> check if user is logged in
+     *              If the user isn't logged in, refer to login
      */
     $scope.$on('$ionicView.enter', function (e) {
       if ($scope.userId === -1) {
@@ -67,7 +68,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * doLogin :: function
-     * description:
+     * description: Login Handler function
      */
     $scope.doLogin = function () {
 
@@ -102,35 +103,42 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * doLoginByNFC :: function
-     * description:
+     * description: NFC Tag Login Handler function
      */
     $scope.doLoginByNFC = function (nfc) {
-      AppFactory.loginUserByNFC(nfc)
-        .success(function (data) {
-          console.log(data);
-          if (data.status) {
-            $scope.userId = data.user._id;
-            $scope.user = data.user;
-            $state.go('app.taskSelection');
-            $scope.loginResult = 'Logged In Successfully';
+      if ($scope.userId === -1) {
+        AppFactory.loginUserByNFC(nfc)
+          .success(function (data) {
+            console.log(data);
+            if (data.status) {
+              $scope.userId = data.user._id;
+              $scope.user = data.user;
+              $state.go('app.taskSelection');
+              $scope.loginResult = 'Logged In Successfully';
 
-            localStorage.userId = $scope.userId;
-            $scope.initTasks();
-            $scope.initMyWeights();
-          }
-          else {
-            $scope.loginResult = 'Incorrect Username or Password';
-          }
-        })
-        .error(function (e) {
-          console.log(e);
-          $scope.loginResult = 'Error Logging In';
-        });
+              localStorage.userId = $scope.userId;
+              $scope.initTasks();
+              $scope.initMyWeights();
+            }
+            else {
+              $scope.loginResult = 'Incorrect Username or Password';
+            }
+          })
+          .error(function (e) {
+            console.log(e);
+            $scope.loginResult = 'Error Logging In';
+          });
+      }
+      else {
+        $scope.alertPopup("Already Logged In");
+      }
     };
 
     /**
      * connectToHost :: function
-     * description:
+     * description: Generic function for connecting to a host via TCP Socket
+     * @param host
+     * @param port
      */
     $scope.connectToHost = function (host, port) {
       if (typeof Socket === 'function') {
@@ -158,7 +166,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * setConnected :: function
-     * description:
+     * description: Callback function that sets connection state to true
      */
     $scope.setConnected = function () {
       $scope.isConnected = true;
@@ -167,7 +175,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * setDisconnected :: function
-     * description:
+     * description: Callback function that sets connection state to false
      */
     $scope.setDisconnected = function () {
       $scope.isConnected = false;
@@ -176,7 +184,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * connectToIndicator :: function
-     * description:
+     * description: Connects to the RAVAS indicator
      */
     $scope.connectToIndicator = function () {
       if (!$scope.isConnected) { // CONNECT TO HOST IF NOT ALREADY CONNECTED
@@ -186,9 +194,9 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * alertPopup :: function
-     * description:
+     * description: Generic function for Ionic Alert Popup
      */
-    $scope.alertPopup = function (title, subtitle) {
+    $scope.alertPopup = function (title, subtitle, callback) {
       var alertPopup = $ionicPopup.alert({
         title: title,
         template: subtitle,
@@ -201,13 +209,15 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       });
 
       alertPopup.then(function (res) {
-        // console.log('Thank you for not eating my delicious ice cream cone');
+        if (callback) {
+          callback(res);
+        }
       });
     };
 
     /**
      * showLocationPopup :: function
-     * description:
+     * description: Show the location confirmation popup when triggered
      */
     $scope.showLocationPopup = function () {
       $scope.locations = {};
@@ -246,7 +256,9 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * checkLocation :: function
-     * description:
+     * description: Checks if the sku inserted from popup is correct
+     *              if true: connects to the indicator and refers to weighing screen
+     *              else alerts that the sku is wrong
      */
     $scope.checkLocation = function (input) {
       if (input == $scope.currentTask[$scope.currentItemIdx].sku) {
@@ -264,7 +276,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * backToItem :: function
-     * description:
+     * description: returns back to item location view from weighing screen
      */
     $scope.backToItem = function () {
       $state.go('app.task');
@@ -272,7 +284,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * startWeighing :: function
-     * description:
+     * description: starts the free weighing mode
      */
     $scope.startWeighing = function () {
       $state.go('app.weigh');
@@ -281,7 +293,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * sendCommand :: function
-     * description:
+     * description: Generic function for sending tcp socket commands
      */
     $scope.sendCommand = function (command) {
       try {
@@ -293,17 +305,18 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         $scope.socket.write(bytes, function () {
           // alert('sent successfully');
         }, function (e) {
-          alert('error: ' + e)
+          alertPopup('Error sending command', e)
         });
       }
       catch (e) {
-        alert('Exception: ' + e);
+        alertPopup('Exception', e);
       }
     };
 
     /**
      * receiveData :: function
-     * description:
+     * description: callback function that handles data received from host
+     *              gathers data received for 300 msec and then handles it
      */
     $scope.receiveData = function (data) {
       var chars = new Array(data.length);
@@ -323,7 +336,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * concatData :: function
-     * description:
+     * description: concatenates data string
      */
     $scope.concatData = function (data) {
       $scope.data += data;
@@ -332,23 +345,23 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * handleData :: function
-     * description:
+     * description: Handles data string and updates the weight accordingly
      */
     $scope.handleData = function () {
       if ($scope.data && $scope.data.length > 0) {
-        if ($scope.data.indexOf('N+') === 0) {
+        if ($scope.data.indexOf('N+') === 0) { // PC Mode
           $scope.data = $scope.data.substring(2);
           if (!isNaN($scope.data)) {
             $scope.weight = parseInt($scope.data);
           }
         }
-        else if ($scope.data.indexOf('+') === 0) {
+        else if ($scope.data.indexOf('+') === 0) { // Repeating Send Mode
           $scope.data = $scope.data.substring(1);
           if (!isNaN($scope.data)) {
             $scope.weight = parseInt($scope.data);
           }
         }
-        else if ($scope.data.toLowerCase().indexOf('ok') > -1) {
+        else if ($scope.data.toLowerCase().indexOf('ok') > -1) { // Tare
           $scope.weight = 0;
         }
         $scope.$apply();
@@ -359,7 +372,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * getWeight :: function
-     * description:
+     * description: Sends weight request to the indicator
      */
     $scope.getWeight = function () {
       console.log('Get weight button clicked');
@@ -370,7 +383,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * goToSettings :: function
-     * description:
+     * description: Refers to settings screen
      */
     $scope.goToSettings = function () {
       $state.go('app.settings');
@@ -378,7 +391,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * tare :: function
-     * description:
+     * description: Sends tare request to the indicator
      */
     $scope.tare = function () {
       console.log('Tare button clicked');
@@ -389,20 +402,25 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * saveSettings :: function
-     * description:
+     * description: Saves the settings for current and further (localStorage) use
      */
     $scope.saveSettings = function (host, port) {
-      $scope.host = host;
-      $scope.port = port;
-      localStorage.host = host;
-      localStorage.port = port;
-      console.log('Setings saved, connection is set to: ' + host + ':' + port);
-      $ionicHistory.goBack();
+      if (host && host.length > 0 && port && !isNaN(port)) {
+        $scope.host = host;
+        $scope.port = port;
+        localStorage.host = host;
+        localStorage.port = port;
+        console.log('Setings saved, connection is set to: ' + host + ':' + port);
+        $ionicHistory.goBack();
+      }
+      else {
+        $scope.alertPopup("Settings not saved", "Please review the data inserted");
+      }
     };
 
     /**
      * selectTask :: function
-     * description:
+     * description: Selects a task (order) from list, gets its data and refers to task view
      */
     $scope.selectTask = function (index) {
       $scope.loading = true;
@@ -421,12 +439,14 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $state.go('app.task');
             }
             else {
+              $scope.alertPopup("Task Not Found","Please refresh and try again");
               console.log('Task not found');
             }
 
           })
           .error(function (e) {
             $scope.loading = false;
+            $scope.alertPopup("Error Loading Task Data","Please try again");
             console.log(e);
           });
 
@@ -435,7 +455,11 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * sendWeight :: function
-     * description:
+     * description: Checks if the weight (from the scale) is within the range of the item's weight
+     *              if true: checks if it's the last item in the order
+     *                  if true: sets the order as done
+     *                  else: continues to the next item
+     *              else: notifies an incorrect weight
      */
     $scope.sendWeight = function () {
       var weight = $scope.weight,
@@ -472,14 +496,13 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
           $scope.alertPopup("Correct weight", "Proceeding to next item");
           $scope.currentItemIdx++;
           $state.go('app.task');
-          //$scope.$apply();
         }
       }
     };
 
     /**
      * initTasks :: function
-     * description:
+     * description: Gets all the ACTIVE tasks for the current user
      */
     $scope.initTasks = function () {
       if ($scope.userId !== -1 && $scope.user) {
@@ -504,10 +527,13 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
     };
 
     /**
-     *
+     * initMyWeights :: function
+     * decription: Gets all of the users saved weights and refers to myweights view
      */
     $scope.initMyWeights = function () {
       if ($scope.userId !== -1 && $scope.user) {
+        $scope.loading = true;
+        $state.go('app.myWeights');
         AppFactory.showAllWeightsByUserName($scope.user.userName)
           .success(function (data) {
             if (data.status) {
@@ -527,7 +553,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
     /**
      * logout :: function
-     * description:
+     * description: Logs out the current user
      */
     $scope.logout = function () {
       $scope.userId = -1;
@@ -537,29 +563,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $scope.alertPopup("Logged out successfully");
       $state.go('app.login');
     };
-
-    /**
-     * nfc :: Event Handler
-     * description:
-     */
-    if (window.cordova) {
-      $ionicPlatform.ready(function () {
-        nfc.addTagDiscoveredListener(
-          function (nfcEvent) {
-            var tag = nfcEvent.tag;
-            var tagId = nfc.bytesToHexString(tag.id);
-            $scope.alertPopup('NFC Detected');
-            $scope.doLoginByNFC(tagId);
-          },
-          function () { // success callback
-            // alert("Waiting for NDEF tag");
-          },
-          function (error) { // error callback
-            alert("Error adding NDEF listener " + JSON.stringify(error));
-          }
-        );
-      });
-    }
 
     /**
      * saveWeight :: function
@@ -578,16 +581,16 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               if (data.status) {
                 $scope.alertPopup("Saved successfully");
               } else {
-                $scope.alertPopup("Error");
+                $scope.alertPopup("Error", "Weight Not Saved");
               }
             })
             .error(function (e) {
               console.log(e);
-              $scope.alertPopup("Error2");
+              $scope.alertPopup("Exception", e);
             });
         },
         function (error) {
-          alert('code: ' + error.code + '\n' +
+          $scope.alertPopup("Geolocation Error", 'code: ' + error.code + '\n' +
             'message: ' + error.message + '\n');
         });
     };
@@ -650,9 +653,10 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         map.setCenter(marker.getPosition());
       }, 0);
     };
+
     /**
      * takeScreenShotAndShare :: function
-     * description:
+     * description: Takes a screenshot and prompts sharing option
      */
     $scope.takeScreenShotAndShare = function () {
       var imageLink;
@@ -666,5 +670,31 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       }, 'jpg', 50, 'myScreenShot');
     };
 
+
+
+    /**
+     * nfc :: Event Handler
+     * description: Listens for an NFC tag event
+     */
+    if (window.cordova) {
+      $ionicPlatform.ready(function () {
+        nfc.addTagDiscoveredListener(
+          function (nfcEvent) {
+            var tag = nfcEvent.tag;
+            var tagId = nfc.bytesToHexString(tag.id);
+            $scope.alertPopup('NFC Detected');
+            $scope.doLoginByNFC(tagId);
+          },
+          function () { // success callback
+            // alert("Waiting for NDEF tag");
+          },
+          function (error) { // error callback
+            alert("Error adding NDEF listener " + JSON.stringify(error));
+          }
+        );
+      });
+    }
+
+    // Trigger App on js load
     $scope.initApp();
   });

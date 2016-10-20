@@ -1,6 +1,7 @@
 <ion-view view-title="WEIGHING">
   <ion-content>
     <div class="container">
+      <div><strong>Amount to pick: {{currentTask[currentItemIdx].amount}}</strong></div>
       <div ng-show="isConnected" class="button button-clear button-positive">CONNECTED TO INDICATOR</div>
       <div ng-show="!isConnected" class="button button-clear button-assertive">
         DISCONNECTED FROM INDICATOR
