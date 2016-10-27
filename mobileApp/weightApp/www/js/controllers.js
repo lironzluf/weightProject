@@ -21,6 +21,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $scope.loading = true;
       $scope.myWeights = [];
 
+      // if localStorage holds a userId -> user has been previously logged -> log the user in
       if (localStorage.userId) {
         $scope.userId = localStorage.userId;
         console.log('Found userId in localStorage: ' + $scope.userId);
@@ -34,13 +35,14 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $scope.initTasks();
               $scope.initMyWeights();
             }
-            else {
+            else { // user not found, refer to login
               $scope.userId = -1;
               $state.go('app.login');
             }
           })
       }
 
+      // get host and port defaults from localStorage if exists
       if (localStorage.host) {
         $scope.host = localStorage.host;
       }
@@ -439,14 +441,14 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $state.go('app.task');
             }
             else {
-              $scope.alertPopup("Task Not Found","Please refresh and try again");
+              $scope.alertPopup("Task Not Found", "Please refresh and try again");
               console.log('Task not found');
             }
 
           })
           .error(function (e) {
             $scope.loading = false;
-            $scope.alertPopup("Error Loading Task Data","Please try again");
+            $scope.alertPopup("Error Loading Task Data", "Please try again");
             console.log(e);
           });
 
@@ -671,7 +673,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
     };
 
 
-
     /**
      * nfc :: Event Handler
      * description: Listens for an NFC tag event
@@ -689,7 +690,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             // alert("Waiting for NDEF tag");
           },
           function (error) { // error callback
-            alert("Error adding NDEF listener " + JSON.stringify(error));
+            alertPopup("Error adding NDEF listener ", JSON.stringify(error));
           }
         );
       });
