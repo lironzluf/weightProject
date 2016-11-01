@@ -9,21 +9,17 @@
                 <thead>
                 <tr>
                     <th>User ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                    <th>Primary Phone</th>
-                    <th>Secondary Phone</th>
+                    <th>UserName</th>
+                    <th>Security Level</th>
+                    <th>NFC</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="client in mCtrl.ClientList"> <!-- ng-repeat -->
-                    <td>{{client.user_id}}</td>
-                    <td>{{client.firstname}}</td>
-                    <td>{{client.lastname}}</td>
-                    <td>{{client.email}}</td>
-                    <td>{{client.primary_phone}}</td>
-                    <td>{{client.secondary_phone}}</td>
+                    <td>{{client._id}}</td>
+                    <td>{{client.userName}}</td>
+                    <td>{{client.securityLevel}}</td>
+                    <td>{{client.nfc}}</td>
                 </tr>
                 </tbody>
             </table>

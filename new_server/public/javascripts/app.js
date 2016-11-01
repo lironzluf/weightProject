@@ -35,7 +35,7 @@ var app = (function () {
 
                         $http({ // ajax http call
                             method: 'POST',
-                            url: 'http://localhost:12345/',
+                            url: 'https://weightproject.herokuapp.com/',
                             cache: false,
                             data: {
                                 action: 'ShowAllCompanies',
@@ -77,7 +77,7 @@ var app = (function () {
 
                         $http({ // ajax http call
                             method: 'POST',
-                            url: 'http://localhost:12345/',
+                            url: 'https://weightproject.herokuapp.com/',
                             cache: false,
                             data: {
                                 action: 'ShowAllBrands',
@@ -122,7 +122,7 @@ var app = (function () {
 
                         $http({ // ajax http call
                             method: 'POST',
-                            url: 'http://localhost:12345/',
+                            url: 'https://weightproject.herokuapp.com/',
                             cache: false,
                             data: {
                                 action: 'ShowAllInvoice',
@@ -152,17 +152,13 @@ var app = (function () {
 
                         $http({ // ajax http call
                             method: 'POST',
-                            url: 'http://localhost:12345/',
-                            cache: false,
-                            data: {
-                                action: 'ShowAllClients',
-                                ID: '',
-                                NAME: ''
-                            }
+                            url: 'http://localhost:3000/users/showallusers',
+                            cache: false
                         })
                             .success(function (data, status) {
                                 if (status == 200) {
                                     defer.resolve(data); // resolve with data
+                                    console.log(data);
                                 }
                             })
                             .error(function (data, status, headers, config) {
@@ -182,7 +178,7 @@ var app = (function () {
 
                         $http({ // ajax http call
                             method: 'POST',
-                            url: 'http://localhost:12345/',
+                            url: 'https://weightproject.herokuapp.com/',
                             cache: false,
                             data: {
                                 action: 'ShowAllParts',
@@ -212,7 +208,7 @@ var app = (function () {
 
                         $http({ // ajax http call
                             method: 'POST',
-                            url: 'http://localhost:12345/',
+                            url: 'https://weightproject.herokuapp.com/',
                             cache: false,
                             data: {
                                 action: 'ShowAllRepair_status',
@@ -242,7 +238,7 @@ var app = (function () {
 
                         $http({ // ajax http call
                             method: 'POST',
-                            url: 'http://localhost:12345/',
+                            url: 'https://weightproject.herokuapp.com/',
                             cache: false,
                             data: {
                                 action: 'ShowAllModel_Parts',

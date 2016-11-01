@@ -238,8 +238,10 @@
                 $('#successAlert').fadeOut('fast');
                 $rootScope.layout.loading = true;
                 try {
-                    mCtrl.ClientList = $route.current.locals.initData;
-                    //console.log(mCtrl.CompanyList);
+                    var data = $route.current.locals.initData;
+                    if (data.status) {
+                        mCtrl.ClientList = $route.current.locals.initData.data;
+                    }
                 }
                 catch (e){
                     console.log(e);
@@ -287,8 +289,8 @@
 
         }]);
 
-    app.controller('HeaderCtrl', ['$rootScope','$scope', '$window', '$location', '$routeParams', '$route', 'Factory', '$interval', '$timeout', '$document',
-        function ($rootScope, $scope, $window, $location, $routeParams, $route, Factory, $interval, $timeout, $document) {
+    app.controller('HeaderCtrl', ['$rootScope',
+        function ($rootScope) {
 
             $rootScope.menuOpen = false;
 

@@ -9,7 +9,7 @@
             {
                 return $http({ // ajax http call
                     method: 'POST',
-                    url: 'http://localhost:12345/',
+                    url: 'https://weightproject.herokuapp.com/',
                     cache: false,
                     data: {
                         action: 'DeleteCompany',
@@ -22,7 +22,7 @@
             {
                 return $http({ // ajax http call
                     method: 'POST',
-                    url: 'http://localhost:12345/',
+                    url: 'https://weightproject.herokuapp.com/',
                     cache: false,
                     data: {
                         action: 'AddCompany',
@@ -35,7 +35,7 @@
             {
                 return $http({ // ajax http call
                     method: 'POST',
-                    url: 'http://localhost:12345/',
+                    url: 'https://weightproject.herokuapp.com/',
                     cache: false,
                     data: {
                         action: 'UpdateCompany',
@@ -48,7 +48,7 @@
             {
                 return $http({ // ajax http call
                     method: 'POST',
-                    url: 'http://localhost:12345/',
+                    url: 'https://weightproject.herokuapp.com/',
                     cache: false,
                     data: {
                         action: 'ShowCompanyById',
@@ -61,7 +61,7 @@
             {
                 return $http({ // ajax http call
                     method: 'POST',
-                    url: 'http://localhost:12345/',
+                    url: 'https://weightproject.herokuapp.com/',
                     cache: false,
                     data: {
                         action: 'DeleteBrand',
@@ -74,7 +74,7 @@
             {
                 return $http({ // ajax http call
                     method: 'POST',
-                    url: 'http://localhost:12345/',
+                    url: 'https://weightproject.herokuapp.com/',
                     cache: false,
                     data: {
                         action: 'UpdateBrand',
@@ -87,7 +87,7 @@
             {
                 return $http({ // ajax http call
                     method: 'POST',
-                    url: 'http://localhost:12345/',
+                    url: 'https://weightproject.herokuapp.com/',
                     cache: false,
                     data: {
                         action: 'AddBrand',
@@ -100,7 +100,7 @@
             {
                 return $http({ // ajax http call
                     method: 'POST',
-                    url: 'http://localhost:12345/',
+                    url: 'https://weightproject.herokuapp.com/',
                     cache: false,
                     data: {
                         action: 'ShowBrandById',
@@ -113,7 +113,7 @@
             {
                 return $http({ // ajax http call
                     method: 'POST',
-                    url: 'http://localhost:12345/',
+                    url: 'https://weightproject.herokuapp.com/',
                     cache: false,
                     data: {
                         action: 'ShowInvoiceById',
