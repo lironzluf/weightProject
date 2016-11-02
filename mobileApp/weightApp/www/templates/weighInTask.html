@@ -1,10 +1,12 @@
 <ion-view view-title="WEIGHING">
   <ion-content>
     <div class="container">
+      <div><strong>Amount to pick: {{currentTask[currentItemIdx].amount}}</strong></div>
       <div ng-show="isConnected" class="button button-clear button-positive">CONNECTED TO INDICATOR</div>
       <div ng-show="!isConnected" class="button button-clear button-assertive">
         DISCONNECTED FROM INDICATOR
         <button class="button button-small button-assertive" ng-click="goToSettings()">Change Settings</button>
+        <button class="button button-small button-assertive" ng-click="backToItem()">Cancel</button>
       </div>
       <div class="clearfix"></div>
       <div style="background:#4E4D4D;margin:50px 0 0 0;border:4px solid #ef473a">
@@ -18,8 +20,9 @@
       <div class="weigh-buttons">
         <button class="button button-light button-assertive" ng-disabled="!isConnected" ng-click="tare()">TARE</button>
         <button class="button button-light button-assertive" ng-disabled="!isConnected" ng-click="getWeight()">GET WEIGHT</button>
-        <button class="button button-light button-assertive" ng-disabled="!isConnected" ng-click="saveWeight()">SAVE</button>
-        <button class="button button-light button-assertive" ng-show="navigator.screenshot" ng-click="takeScreenShotAndShare()">SHARE</button>
+      </div>
+      <div class="action-buttons">
+        <button class="button button-light button-assertive" ng-disabled="!isConnected" ng-click="sendWeight()">SEND WEIGHT</button>
       </div>
     </div>
   </ion-content>

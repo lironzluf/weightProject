@@ -1,15 +1,19 @@
-<ion-view view-title="TASKS" hide-back-button="true">
+<ion-view view-title="TASKS">
   <ion-content>
     <div class="container">
-      <div ng-show="tasks.length > 0">
+      <div ng-show="loading" class="loading-animation">
+        {{autoLoginMsg}}<br/><br/>
+        <ion-spinner></ion-spinner>
+      </div>
+      <div ng-show="tasks.length > 0" ng-hide="loading">
         <b>Select a task:</b><br/><br/>
         <ion-list>
           <ion-item ng-repeat="task in tasks" ng-click="selectTask($index)">
-            {{task.id}} <span class="task-started" ng-show="task.inProgress">- In Progress</span>
+            {{task}}
           </ion-item>
         </ion-list>
       </div>
-      <div ng-show="tasks.length === 0">
+      <div ng-show="tasks.length == 0 && !loading">
         <b>There are no avialable tasks.</b>
       </div>
     </div>

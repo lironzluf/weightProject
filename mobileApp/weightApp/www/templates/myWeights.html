@@ -1,0 +1,18 @@
+<ion-view view-title="MY WEIGHTS">
+   <ion-content>
+      <div class="container">
+         <div ng-show="loading" class="loading-animation"><ion-spinner></ion-spinner></div>
+         <div ng-show="myWeight.length > 0" ng-hide="loading">
+            <b>Select a weight row:</b><br/><br/>
+            <div class="row item" ng-repeat="myWeight in myWeights" ng-click="selectWeight($index)">
+               <div class="col">{{myWeight.date}}</div>
+               <div class="col">{{myWeight.weight}}</div>
+            </div>
+         </div>
+         <div ng-show="myWeight.length == 0 && !loading">
+            <b>There are no avialable weights.</b>
+         </div>
+
+      </div>
+   </ion-content>
+</ion-view>
