@@ -1,7 +1,7 @@
-(function (app) {
+(function(app) {
 
-    app.controller('MainCtrl', ['$rootScope','$scope', '$window', '$location', '$routeParams', '$route', 'Factory', '$interval', '$timeout', '$document',
-        function ($rootScope, $scope, $window, $location, $routeParams, $route, Factory, $interval, $timeout, $document) {
+    app.controller('MainCtrl', ['$rootScope', '$scope', '$window', '$location', '$routeParams', '$route', 'Factory', '$interval', '$timeout', '$document',
+        function($rootScope, $scope, $window, $location, $routeParams, $route, Factory, $interval, $timeout, $document) {
 
             var mCtrl = this;
             $rootScope.ID = '';
@@ -13,47 +13,44 @@
             mCtrl.PartList = {};
             mCtrl.RepairList = {};
             mCtrl.ClientList = {};
-            mCtrl.InvoiceList = {};
+            mCtrl.myWeightList = {};
 
-            mCtrl.initCompanyList = function(){
+            mCtrl.initCompanyList = function() {
                 $('#successAlert').fadeOut('fast');
                 $rootScope.layout.loading = true;
                 try {
                     mCtrl.CompanyList = $route.current.locals.initData;
                     //console.log(mCtrl.CompanyList);
-                }
-                catch (e){
+                } catch (e) {
                     console.log(e);
                 }
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.deleteCompany = function(){
+            mCtrl.deleteCompany = function() {
                 $rootScope.layout.loading = true;
-                try{
-                    Factory.deleteCompany($rootScope.ID,$rootScope.NAME).success(function(){
-                    $('#successAlert').fadeIn('slow');
-                    }).error(function(e){
+                try {
+                    Factory.deleteCompany($rootScope.ID, $rootScope.NAME).success(function() {
+                        $('#successAlert').fadeIn('slow');
+                    }).error(function(e) {
                         console.log(e);
                     });
-                }
-                catch(e){
+                } catch (e) {
                     console.log(e);
                 }
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.addCompany = function(){
+            mCtrl.addCompany = function() {
                 $rootScope.layout.loading = true;
-                try{
-                    Factory.addCompany($rootScope.ID,$rootScope.NAME).success(function(){
+                try {
+                    Factory.addCompany($rootScope.ID, $rootScope.NAME).success(function() {
                         //console.log('success');
                         $('#successAlert').fadeIn('slow');
-                    }).error(function(e){
+                    }).error(function(e) {
                         console.log(e);
                     });
-                }
-                catch(e){
+                } catch (e) {
                     console.log(e);
                 }
                 // Reset the form model.
@@ -64,17 +61,16 @@
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.updateCompany = function(){
+            mCtrl.updateCompany = function() {
                 $rootScope.layout.loading = true;
-                try{
-                    Factory.updateCompany($rootScope.ID,$rootScope.NAME).success(function(){
+                try {
+                    Factory.updateCompany($rootScope.ID, $rootScope.NAME).success(function() {
                         //console.log('success');
                         $('#successAlert').fadeIn('slow');
-                    }).error(function(e){
+                    }).error(function(e) {
                         console.log(e);
                     });
-                }
-                catch(e){
+                } catch (e) {
                     console.log(e);
                 }
                 // Reset the form model.
@@ -85,65 +81,61 @@
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.searchCompany = function(){
+            mCtrl.searchCompany = function() {
                 $rootScope.layout.loading = true;
-                try{
+                try {
                     mCtrl.CompanyList = {};
-                    Factory.searchCompany($rootScope.ID,$rootScope.NAME).success(function(data){
+                    Factory.searchCompany($rootScope.ID, $rootScope.NAME).success(function(data) {
                         console.log(data);
                         if (typeof data != 'undefined') {
                             mCtrl.CompanyList = data;
                             $('#searchResults').fadeIn('slow');
                         }
-                    }).error(function(e){
+                    }).error(function(e) {
                         console.log(e);
                     });
-                }
-                catch(e){
+                } catch (e) {
                     console.log(e);
                 }
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.initBrandList = function(){
+            mCtrl.initBrandList = function() {
                 $('#successAlert').fadeOut('fast');
                 $rootScope.layout.loading = true;
                 try {
                     mCtrl.BrandList = $route.current.locals.initData;
                     //console.log(mCtrl.CompanyList);
-                }
-                catch (e){
+                } catch (e) {
                     console.log(e);
                 }
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.deleteBrand = function(){
+            mCtrl.deleteBrand = function() {
                 $rootScope.layout.loading = true;
-                try{
-                    Factory.deleteBrand($rootScope.ID,$rootScope.NAME).success(function(){
+                try {
+                    Factory.deleteBrand($rootScope.ID, $rootScope.NAME).success(function() {
                         $('#successAlert').fadeIn('slow');
-                    }).error(function(e){
+                    }).error(function(e) {
                         console.log(e);
                     });
-                }
-                catch(e){
+                } catch (e) {
                     console.log(e);
                 }
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.addBrand = function(){
+            mCtrl.addBrand = function() {
                 $rootScope.layout.loading = true;
-                try{
-                    Factory.addBrand($rootScope.ID,$rootScope.NAME).success(function(){
+                try {
+                    Factory.addBrand($rootScope.ID, $rootScope.NAME).success(function() {
                         //console.log('success');
                         $('#successAlert').fadeIn('slow');
-                    }).error(function(e){
+                    }).error(function(e) {
                         console.log(e);
                     });
-                }
-                catch(e){
+                } catch (e) {
                     console.log(e);
                 }
                 // Reset the form model.
@@ -154,17 +146,16 @@
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.updateBrand = function(){
+            mCtrl.updateBrand = function() {
                 $rootScope.layout.loading = true;
-                try{
-                    Factory.updateBrand($rootScope.ID,$rootScope.NAME).success(function(){
+                try {
+                    Factory.updateBrand($rootScope.ID, $rootScope.NAME).success(function() {
                         //console.log('success');
                         $('#successAlert').fadeIn('slow');
-                    }).error(function(e){
+                    }).error(function(e) {
                         console.log(e);
                     });
-                }
-                catch(e){
+                } catch (e) {
                     console.log(e);
                 }
                 // Reset the form model.
@@ -175,66 +166,62 @@
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.searchBrand = function(){
+            mCtrl.searchBrand = function() {
                 $rootScope.layout.loading = true;
-                try{
+                try {
                     mCtrl.CompanyList = {};
-                    Factory.searchBrand($rootScope.ID,$rootScope.NAME).success(function(data){
+                    Factory.searchBrand($rootScope.ID, $rootScope.NAME).success(function(data) {
                         //console.log(data);
                         if (typeof data != 'undefined') {
                             mCtrl.BrandList = data;
                             $('#searchResults').fadeIn('slow');
                         }
-                    }).error(function(e){
+                    }).error(function(e) {
                         console.log(e);
                     });
-                }
-                catch(e){
+                } catch (e) {
                     console.log(e);
                 }
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.initPartModels = function(){
+            mCtrl.initPartModels = function() {
                 $('#successAlert').fadeOut('fast');
                 $rootScope.layout.loading = true;
                 try {
                     mCtrl.PartModels = $route.current.locals.initData;
                     //console.log(mCtrl.CompanyList);
-                }
-                catch (e){
+                } catch (e) {
                     console.log(e);
                 }
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.initPartList = function(){
+            mCtrl.initPartList = function() {
                 $('#successAlert').fadeOut('fast');
                 $rootScope.layout.loading = true;
                 try {
                     mCtrl.PartList = $route.current.locals.initData;
                     //console.log(mCtrl.CompanyList);
-                }
-                catch (e){
+                } catch (e) {
                     console.log(e);
                 }
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.initRepairList = function(){
+            mCtrl.initRepairList = function() {
                 $('#successAlert').fadeOut('fast');
                 $rootScope.layout.loading = true;
                 try {
                     mCtrl.RepairList = $route.current.locals.initData;
                     //console.log(mCtrl.CompanyList);
-                }
-                catch (e){
+                } catch (e) {
                     console.log(e);
                 }
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.initClientList = function(){
+            mCtrl.initClientList = function() {
                 $('#successAlert').fadeOut('fast');
                 $rootScope.layout.loading = true;
                 try {
@@ -242,55 +229,56 @@
                     if (data.status) {
                         mCtrl.ClientList = $route.current.locals.initData.data;
                     }
-                }
-                catch (e){
+                } catch (e) {
                     console.log(e);
                 }
                 $rootScope.layout.loading = false;
             };
 
 
-            mCtrl.initInvoiceList = function(){
+            mCtrl.initmyWeightList = function() {
                 $('#successAlert').fadeOut('fast');
                 $rootScope.layout.loading = true;
                 try {
-                    mCtrl.InvoiceList = $route.current.locals.initData;
+                    var data = $route.current.locals.initData;
+                    if (data.status) {
+                        mCtrl.myWeightList = $route.current.locals.initData.data;
+                    }
                     //console.log(mCtrl.CompanyList);
-                }
-                catch (e){
+                } catch (e) {
                     console.log(e);
                 }
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.searchInvoice = function(){
+            mCtrl.searchmyWeight = function() {
                 $rootScope.layout.loading = true;
-                try{
+                try {
                     mCtrl.CompanyList = {};
-                    Factory.searchInvoice($rootScope.ID,$rootScope.NAME).success(function(data){
+                    Factory.searchmyWeight($rootScope.ID, $rootScope.WEIGHT).success(function(data) {
                         //console.log(data);
                         if (typeof data != 'undefined') {
-                            mCtrl.InvoiceList = data;
+                            mCtrl.myWeightList = data;
                             $('#searchResults').fadeIn('slow');
                         }
-                    }).error(function(e){
+                    }).error(function(e) {
                         console.log(e);
                     });
-                }
-                catch(e){
+                } catch (e) {
                     console.log(e);
                 }
                 $rootScope.layout.loading = false;
             };
 
-            $document.ready(function(){
+            $document.ready(function() {
                 //document ready functions
             });
 
-        }]);
+        }
+    ]);
 
     app.controller('HeaderCtrl', ['$rootScope',
-        function ($rootScope) {
+        function($rootScope) {
 
             $rootScope.menuOpen = false;
 
@@ -299,42 +287,42 @@
             hCtrl.sideMenuToggle = function() {
 
 
-                if ($('#sideBar').hasClass('toggled')){
-                        $('#sideBar').removeClass('toggled');
-                        $('#mainTemplate .container').css('margin-left','auto');
-                        $rootScope.menuOpen = false;
-                    }
-                else{
-                        $('#sideBar').addClass('toggled');
-                        $('#mainTemplate .container').css('margin-left','300px');
-                        $rootScope.menuOpen = true;
-                    }
+                if ($('#sideBar').hasClass('toggled')) {
+                    $('#sideBar').removeClass('toggled');
+                    $('#mainTemplate .container').css('margin-left', 'auto');
+                    $rootScope.menuOpen = false;
+                } else {
+                    $('#sideBar').addClass('toggled');
+                    $('#mainTemplate .container').css('margin-left', '300px');
+                    $rootScope.menuOpen = true;
+                }
 
             };
 
-            hCtrl.toggleDrop = function(event){
+            hCtrl.toggleDrop = function(event) {
                 var el = event.target;
                 if (el.tagName == 'I')
                     el = $(el).parent().parent();
                 var dropMenu = $(el).parent().find('ul');
 
-                
+
                 //$(dropMenu).toggleClass('fadeInDown').css('animation-duration','0.3s').css('webkit-animation-duration','0.3s');
                 $(dropMenu).toggleClass('hide');
                 //$(dropMenu).hide();
-                
+
             };
 
-            hCtrl.collapseMenu = function(){
+            hCtrl.collapseMenu = function() {
                 $('.menu-trigger').removeClass('open');
-                $('.sub-menu').each(function(){
+                $('.sub-menu').each(function() {
                     $(this).removeClass('active');
                     $(this).find('ul').addClass('hide');
 
                 })
             };
 
-        }]);
+        }
+    ]);
 
 
 })(app || {});

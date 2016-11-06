@@ -1,0 +1,27 @@
+<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}" ng-init="mCtrl.initmyWeightList()">
+    <div class="card">
+        <div class="card-header">
+            <h2>myWeight List <small>List of all the myWeights in the database</small></h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>myWeight ID</th>
+                        <th>date</th>
+                        <th>weight</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="Task in mCtrl.myWeightList">
+                        <!-- ng-repeat -->
+                        <td>{{myWeight.id}}</td>
+                        <td>{{myWeight.date}}</td>
+                        <td>{{myWeight.weight}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
