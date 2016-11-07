@@ -11,12 +11,12 @@ router.post('/insertnewweight', function (req, res) {
     "weight": req.body.weight,
     "latitude": req.body.latitude,
     "longitude": req.body.longitude
-  }
+  };
   var resObj = {status: false};
   db.weightFunctions.insertNewWeight(weight)
     .done(function (data) {
       resObj.status = true;
-      resObj.data = data
+      resObj.data = data;
       res.json(resObj);
     }, function (err) {
       res.json(resObj);

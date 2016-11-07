@@ -76,7 +76,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
       var userId = $scope.loginData.userId;
       var password = $scope.loginData.password;
-      if (userId && password && userId.length > 0 & password.length > 0) {
+      if (userId && password && userId.length > 0 && password.length > 0) {
         AppFactory.loginUser(userId, password)
           .success(function (data) {
             console.log(data);

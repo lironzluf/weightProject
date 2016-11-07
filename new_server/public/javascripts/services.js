@@ -4,19 +4,27 @@
     app.factory('Factory', ['$http', '$q', function ($http, $q)
     {
         return {
-            searchInvoice: function (ID,NAME)
-            {
+            loginUser: function(userName,password){
                 return $http({ // ajax http call
                     method: 'POST',
-                    url: serverUrl,
+                    url: serverUrl + 'users/login',
                     cache: false,
                     data: {
-                        action: 'ShowInvoiceById',
-                        ID: ID,
-                        NAME: NAME
+                        userName: userName,
+                        password: password
                     }
                 });
-            }
+            },
+            loginUserById: function(userId){
+                return $http({ // ajax http call
+                    method: 'POST',
+                    url: serverUrl + 'users/loginbyid',
+                    cache: false,
+                    data: {
+                        userId: userId
+                    }
+                });
+            },
 
 
         }

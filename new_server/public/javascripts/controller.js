@@ -4,10 +4,14 @@
     function ($rootScope, $scope, $window, $location, $routeParams, $route, Factory, $interval, $timeout, $document) {
 
       var mCtrl = this;
-      $rootScope.ID = '';
-      $rootScope.NAME = '';
 
-      mCtrl.UserList = {};
+      if (!$rootScope.user) {
+        $rootScope.userName = '';
+        $rootScope.userId = -1;
+        $rootScope.user = {};
+        $rootScope.loginData = {};
+      }
+      mCtrl.UserList = [];
       mCtrl.OrderList = [];
 
       /*
@@ -138,6 +142,43 @@
         $rootScope.layout.loading = false;
       };
 
+      mCtrl.doLogin = function () {
+
+        var userId = $rootScope.loginData.userId;
+        var password = $rootScope.loginData.password;
+        if (userId && password && userId.length > 0 && password.length > 0) {
+          Factory.loginUser(userId, password)
+            .success(function (data) {
+              if (data.status) {
+                if (data.user.securityLevel !== "3") {
+                  console.log(data.user.securityLevel);
+                  $rootScope.loginData.errMsg = "You don't have permission to enter the admin panel";
+                  $rootScope.user = {};
+                  $rootScope.userId = -1;
+                  $rootScope.userName = '';
+                }
+                else {
+                  $rootScope.userId = data.user._id;
+                  $rootScope.user = data.user;
+                  $rootScope.userName = data.user.userName;
+                  $location.path('/home');
+                  localStorage.userId = $rootScope.userId;
+                }
+              }
+              else {
+                $rootScope.loginData.errMsg = "Incorrect Username or Password";
+              }
+            })
+            .error(function (e) {
+              console.log(e);
+              $rootScope.loginData.errMsg = "Error Logging In";
+            });
+        }
+        else {
+          $rootScope.loginData.errMsg = "Please fill in these required fields";
+        }
+      };
+
       $document.ready(function () {
         //document ready functions
       });
@@ -187,6 +228,13 @@
           $(this).find('ul').addClass('hide');
 
         })
+      };
+
+      hCtrl.logout = function () {
+        $rootScope.userId = -1;
+        $rootScope.user = {};
+        $rootScope.loginData = {};
+        localStorage.removeItem('userId');
       };
 
     }]);

@@ -1,8 +1,10 @@
 var app = (function () {
+
   // create app module
   var app = angular.module('app', ['ngRoute']);
 
   var date = '07_11_2016';
+
   // app configuration
   app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
     // intercept POST requests, convert to standard form encoding
@@ -25,6 +27,9 @@ var app = (function () {
       .when('/home', {
         templateUrl: './templates/main.html?ver=' + date
       })
+      .when('/login', {
+        templateUrl: './templates/login.html?ver=' + date
+      })
       .when('/Items/list', {
         templateUrl: './templates/Items/list.html?ver=' + date,
         resolve: {
@@ -39,7 +44,6 @@ var app = (function () {
               .success(function (data, status) {
                 if (status == 200) {
                   defer.resolve(data); // resolve with data
-                  console.log(data);
                 }
               })
               .error(function (data, status, headers, config) {
@@ -88,7 +92,6 @@ var app = (function () {
               .success(function (data, status) {
                 if (status == 200) {
                   defer.resolve(data); // resolve with data
-                  console.log(data);
                 }
               })
               .error(function (data, status, headers, config) {
@@ -102,7 +105,53 @@ var app = (function () {
       .otherwise({
         templateUrl: './templates/404.html?ver=' + date
       });
-  }]);
+  }])
+    .run(function($location,$rootScope,Factory){
+      // register listener to watch route changes
+      $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+        if ($rootScope.userId === -1) {
+          if (next.templateUrl == "/templates/users.html?ver=" + date) { }
+          else {
+            if (localStorage) {
+              if (localStorage.userId) {
+                $rootScope.userId = localStorage.userId;
+                console.log('Found userId in localStorage: ' + $rootScope.userId);
+                Factory.loginUserById($rootScope.userId)
+                  .success(function (data) {
+                    if (data.status) {
+                      if (data.user.securityLevel !== "3") {
+                        console.log(data.user.securityLevel);
+                        $rootScope.loginData.errMsg = "You don't have permission to enter the admin panel";
+                        $rootScope.user = {};
+                        $rootScope.userId = -1;
+                        $rootScope.userName = '';
+                      }
+                      else {
+                        $rootScope.userId = data.user._id;
+                        $rootScope.user = data.user;
+                        $rootScope.userName = data.user.userName;
+                        $location.path('/home');
+                        localStorage.userId = $rootScope.userId;
+                      }
+                    }
+                    else { // user not found, refer to login
+                      $rootScope.userId = -1;
+                      $location.path('/login');
+                    }
+                  })
+              }
+              else { // user not found, refer to login
+                $rootScope.userId = -1;
+                $location.path('/login');
+              }
+            }
+            else {
+              $location.path("/login");
+            }
+          }
+        }
+      });
+    });
 
   return app;
 })();
