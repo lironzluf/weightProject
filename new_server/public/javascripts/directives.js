@@ -1,5 +1,5 @@
 var date = '08_05_2016';
-
+var currentDate = new Date();
 (function (app) {
     app.directive('toggleClass', function () {
         return {
@@ -28,7 +28,7 @@ var date = '08_05_2016';
                         center: 'prev, title, next',
                         left: ''
                     },
-                    defaultDate: '2016-06-12',
+                    defaultDate: currentDate.getFullYear() + '-' + (currentDate.getMonth() + 1 < 9 ? '0' + (currentDate.getMonth() + 1) : (currentDate.getMonth() + 1)) + '-' + (currentDate.getDate() + 1 < 9 ? '0' + (currentDate.getDate() + 1) : (currentDate.getDate() + 1)),
                     editable: true,
                     events: [
                         {
@@ -80,49 +80,6 @@ var date = '08_05_2016';
                 });
             }
         }
-    })
-
-    app.run(function($rootScope,$timeout) {
-
-        $rootScope.layout = {};
-        $rootScope.layout.loading = false;
-        $rootScope.firstLoad = true;
-        $rootScope.$on('$routeChangeStart', function() {
-
-            //show loading gif
-            $timeout(function(){
-                $rootScope.layout.loading = true;
-            });
-
-            if ($rootScope.firstLoad){
-                $rootScope.firstLoad = false;
-            }
-            else {
-                $rootScope.$$childHead.hCtrl.sideMenuToggle();
-                $rootScope.$$childHead.hCtrl.collapseMenu();
-            }
-            //$rootScope.HeaderCtrl.sideMenuToggle();
-
-            $rootScope.ID = '';
-            $rootScope.NAME = '';
-
-        });
-
-        $rootScope.$on('$routeChangeSuccess', function() {
-
-            //hide loading gif
-            $timeout(function(){
-                $rootScope.layout.loading = false;
-            }, 500);
-
-        });
-
-        $rootScope.$on('$routeChangeError', function() {
-
-            //hide loading gif
-            alert('wtff');
-            $rootScope.layout.loading = false;
-        });
     });
 })(app || {});
 

@@ -106,9 +106,38 @@ var app = (function () {
         templateUrl: './templates/404.html?ver=' + date
       });
   }])
-    .run(function($location,$rootScope,Factory){
-      // register listener to watch route changes
+    .run(function($location,$rootScope,Factory,$timeout){
+      $rootScope.layout = {};
+      $rootScope.layout.loading = false;
+      $rootScope.firstLoad = true;
+
+      $rootScope.$on('$routeChangeSuccess', function() {
+
+        //hide loading gif
+        $timeout(function(){
+          $rootScope.layout.loading = false;
+        }, 500);
+
+      });
+
+      $rootScope.$on('$routeChangeError', function() {
+        $rootScope.layout.loading = false;
+      });
+
       $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+        //show loading gif
+        $timeout(function(){
+          $rootScope.layout.loading = true;
+        });
+
+        if ($rootScope.firstLoad){
+          $rootScope.firstLoad = false;
+        }
+        else {
+          $rootScope.$$childHead.hCtrl.sideMenuToggle();
+          $rootScope.$$childHead.hCtrl.collapseMenu();
+        }
+
         if ($rootScope.userId === -1) {
           if (next.templateUrl == "/templates/users.html?ver=" + date) { }
           else {
