@@ -3,18 +3,20 @@
       <div class="container">
          <div ng-show="loading" class="loading-animation"><ion-spinner></ion-spinner></div>
          <div ng-show="myWeight.length > 0" ng-hide="loading">
-             <div class="search">
+             <center>
+             <div class="search" >
              <label> search weights</label>
                  <input type="text" ng-model="search_query">
                  <label> Order by:</label>
                  <select ng-model="order_query">
-                 <option value="date"> date</option>                                    <option value="weight"> weight</option>
+                 <option value="date"> date</option>    
+                 <option value="weight"> weight</option>
                  </select>
                  reverse <input type="checkbox" ng-model ="reverse_query" value="reverse">
              </div>
+             </center>
             <b>Select a weight row:</b><br/><br/>
             <div class="row item" ng-repeat="myWeight in myWeights  | filter:search_query | orderBy :order_query :reverse_query " ng-click="selectWeight($index)">
-               <div class="col">{{myWeight.id}}</div>
                <div class="col">{{myWeight.date}}</div>
                <div class="col">{{myWeight.weight}}</div>
             </div>
@@ -22,7 +24,7 @@
          <div ng-show="myWeight.length == 0 && !loading">
             <b>There are no avialable weights.</b>
          </div>
-
       </div>
+
    </ion-content>
 </ion-view>
