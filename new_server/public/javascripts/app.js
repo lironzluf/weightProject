@@ -1,9 +1,8 @@
 var app = (function () {
-
     // create app module
     var app = angular.module('app', ['ngRoute']);
 
-    var date = '23_5_2016';
+    var date = '07_11_2016';
     // app configuration
     app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpProvider) {
         // intercept POST requests, convert to standard form encoding
@@ -26,8 +25,8 @@ var app = (function () {
             .when('/home', {
                 templateUrl: './templates/main.html?ver=' + date
             })
-            .when('/Companies/list', {
-                templateUrl: './templates/Companies/list.html?ver=' + date,
+            .when('/Orders/list', {
+                templateUrl: './templates/Orders/list.html?ver=' + date,
                 resolve:
                 {
                     initData: function ($q, $http, $route) {
@@ -35,41 +34,25 @@ var app = (function () {
 
                         $http({ // ajax http call
                             method: 'POST',
-                            url: 'https://weightproject.herokuapp.com/',
-                            cache: false,
-                            data: {
-                                action: 'ShowAllCompanies',
-                                ID: '',
-                                NAME: ''
-                            }
+                            url: serverUrl + 'orders/showallorders',
+                            cache: false
                         })
-                            .success(function (data, status) {
-                                if (status == 200) {
-                                    defer.resolve(data); // resolve with data
-                                }
-                            })
-                            .error(function (data, status, headers, config) {
-                                console.log(data);
-                            });
+                          .success(function (data, status) {
+                              if (status == 200) {
+                                  defer.resolve(data); // resolve with data
+                                  console.log(data);
+                              }
+                          })
+                          .error(function (data, status, headers, config) {
+                              console.log(data);
+                          });
 
                         return defer.promise; // return promise object
                     }
                 }
             })
-            .when('/Companies/add', {
-                templateUrl: './templates/Companies/add.html?ver=' + date
-            })
-            .when('/Companies/update', {
-                templateUrl: './templates/Companies/update.html?ver=' + date
-            })
-            .when('/Companies/search', {
-                templateUrl: './templates/Companies/search.html?ver=' + date
-            })
-            .when('/Companies/delete', {
-                templateUrl: './templates/Companies/delete.html?ver=' + date
-            })
-            .when('/Brands/list', {
-                templateUrl: './templates/Brands/list.html?ver=' + date,
+            .when('/users', {
+                templateUrl: './templates/users.html?ver=' + date,
                 resolve:
                 {
                     initData: function ($q, $http, $route) {
@@ -77,178 +60,13 @@ var app = (function () {
 
                         $http({ // ajax http call
                             method: 'POST',
-                            url: 'https://weightproject.herokuapp.com/',
-                            cache: false,
-                            data: {
-                                action: 'ShowAllBrands',
-                                ID: '',
-                                NAME: ''
-                            }
-                        })
-                            .success(function (data, status) {
-                                if (status == 200) {
-                                    defer.resolve(data); // resolve with data
-                                }
-                            })
-                            .error(function (data, status, headers, config) {
-                                console.log(data);
-                            });
-
-                        return defer.promise; // return promise object
-                    }
-                }
-            })
-            .when('/Brands/add', {
-                templateUrl: './templates/Brands/add.html?ver=' + date
-            })
-            .when('/Brands/search', {
-                templateUrl: './templates/Brands/search.html?ver=' + date
-            })
-            .when('/Brands/update', {
-                templateUrl: './templates/Brands/update.html?ver=' + date
-            })
-            .when('/Brands/delete', {
-                templateUrl: './templates/Brands/delete.html?ver=' + date
-            })
-            .when('/Invoices/search', {
-                templateUrl: './templates/Invoices/search.html?ver=' + date
-            })
-            .when('/Invoices/list', {
-                templateUrl: './templates/Invoices/list.html?ver=' + date,
-                resolve:
-                {
-                    initData: function ($q, $http, $route) {
-                        var defer = $q.defer(); // create a promise object
-
-                        $http({ // ajax http call
-                            method: 'POST',
-                            url: 'https://weightproject.herokuapp.com/',
-                            cache: false,
-                            data: {
-                                action: 'ShowAllInvoice',
-                                ID: '',
-                                NAME: ''
-                            }
-                        })
-                            .success(function (data, status) {
-                                if (status == 200) {
-                                    defer.resolve(data); // resolve with data
-                                }
-                            })
-                            .error(function (data, status, headers, config) {
-                                console.log(data);
-                            });
-
-                        return defer.promise; // return promise object
-                    }
-                }
-            })
-            .when('/clients', {
-                templateUrl: './templates/clients.html?ver=' + date,
-                resolve:
-                {
-                    initData: function ($q, $http, $route) {
-                        var defer = $q.defer(); // create a promise object
-
-                        $http({ // ajax http call
-                            method: 'POST',
-                            url: 'http://localhost:3000/users/showallusers',
+                            url: serverUrl + 'users/showallusers',
                             cache: false
                         })
                             .success(function (data, status) {
                                 if (status == 200) {
                                     defer.resolve(data); // resolve with data
                                     console.log(data);
-                                }
-                            })
-                            .error(function (data, status, headers, config) {
-                                console.log(data);
-                            });
-
-                        return defer.promise; // return promise object
-                    }
-                }
-            })
-            .when('/Parts/part', {
-                templateUrl: './templates/Parts/part.html?ver=' + date,
-                resolve:
-                {
-                    initData: function ($q, $http, $route) {
-                        var defer = $q.defer(); // create a promise object
-
-                        $http({ // ajax http call
-                            method: 'POST',
-                            url: 'https://weightproject.herokuapp.com/',
-                            cache: false,
-                            data: {
-                                action: 'ShowAllParts',
-                                ID: '',
-                                NAME: ''
-                            }
-                        })
-                            .success(function (data, status) {
-                                if (status == 200) {
-                                    defer.resolve(data); // resolve with data
-                                }
-                            })
-                            .error(function (data, status, headers, config) {
-                                console.log(data);
-                            });
-
-                        return defer.promise; // return promise object
-                    }
-                }
-            })
-            .when('/Parts/repair', {
-                templateUrl: './templates/Parts/repair.html?ver=' + date,
-                resolve:
-                {
-                    initData: function ($q, $http, $route) {
-                        var defer = $q.defer(); // create a promise object
-
-                        $http({ // ajax http call
-                            method: 'POST',
-                            url: 'https://weightproject.herokuapp.com/',
-                            cache: false,
-                            data: {
-                                action: 'ShowAllRepair_status',
-                                ID: '',
-                                NAME: ''
-                            }
-                        })
-                            .success(function (data, status) {
-                                if (status == 200) {
-                                    defer.resolve(data); // resolve with data
-                                }
-                            })
-                            .error(function (data, status, headers, config) {
-                                console.log(data);
-                            });
-
-                        return defer.promise; // return promise object
-                    }
-                }
-            })
-            .when('/Parts/model', {
-                templateUrl: './templates/Parts/model.html?ver=' + date,
-                resolve:
-                {
-                    initData: function ($q, $http, $route) {
-                        var defer = $q.defer(); // create a promise object
-
-                        $http({ // ajax http call
-                            method: 'POST',
-                            url: 'https://weightproject.herokuapp.com/',
-                            cache: false,
-                            data: {
-                                action: 'ShowAllModel_Parts',
-                                ID: '',
-                                NAME: ''
-                            }
-                        })
-                            .success(function (data, status) {
-                                if (status == 200) {
-                                    defer.resolve(data); // resolve with data
                                 }
                             })
                             .error(function (data, status, headers, config) {

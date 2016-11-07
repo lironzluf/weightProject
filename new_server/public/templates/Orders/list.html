@@ -1,7 +1,12 @@
 <div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}" ng-init="mCtrl.initInvoiceList()">
     <div class="card">
         <div class="card-header">
-            <h2>Invoice List <small>List of all the invoices in the database</small></h2>
+            <div style="float:right">
+                <h2><small>Search order by ID or Name</small></h2>
+                <input type="text" ng-model="search.$"/>
+            </div>
+            <h2>Order List <small>List of all the items in the database</small></h2>
+            <div class="clearfix"></div>
         </div>
 
         <div class="table-responsive">
@@ -17,13 +22,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="invoice in mCtrl.InvoiceList"> <!-- ng-repeat -->
-                    <td>{{invoice.id}}</td>
-                    <td>{{invoice.company_id}}</td>
-                    <td>{{invoice._name}}</td>
-                    <td>{{invoice.serial_no}}</td>
-                    <td>{{invoice.date}}</td>
-                    <td>{{invoice.total_value}}</td>
+                <tr ng-repeat="order in mCtrl.OrderList"> <!-- ng-repeat -->
+                    <td>{{order.id}}</td>
+                    <td>{{order.company_id}}</td>
+                    <td>{{order._name}}</td>
+                    <td>{{order.serial_no}}</td>
+                    <td>{{order.date}}</td>
+                    <td>{{order.total_value}}</td>
                 </tr>
                 </tbody>
             </table>

@@ -1,0 +1,33 @@
+<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}" ng-init="mCtrl.initItemList()">
+    <div class="card">
+        <div class="card-header">
+            <div style="float:right">
+                <h2><small>Search item by ID or Name</small></h2>
+                <input type="text" ng-model="search.$"/>
+            </div>
+            <h2>Item List <small>List of all the items in the database</small></h2>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Model Part ID</th>
+                    <th>Brand Name</th>
+                    <th>Part Name</th>
+                    <th>Model Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="item in mCtrl.ItemList"> <!-- ng-repeat -->
+                    <td>{{item.id}}</td>
+                    <td>{{item._name}}</td>
+                    <td>{{item.part}}</td>
+                    <td>{{item.model}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
