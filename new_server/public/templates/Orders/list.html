@@ -1,11 +1,18 @@
-<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}" ng-init="mCtrl.initInvoiceList()">
+<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}"
+     ng-init="mCtrl.initOrderList()">
     <div class="card">
         <div class="card-header">
             <div style="float:right">
-                <h2><small>Search order by ID or Name</small></h2>
+                <h2>
+                    <small>Search order by ID or User Assigned</small>
+                </h2>
                 <input type="text" ng-model="search.$"/>
             </div>
-            <h2>Order List <small>List of all the items in the database</small></h2>
+            <h2>Order List
+                <small>List of all the orders in the database</small>
+                <br/></h2>
+            <input type="checkbox" ng-model="search.status" ng-true-value="" ng-false-value="0">
+            <small>Show Done</small>
             <div class="clearfix"></div>
         </div>
 
@@ -13,22 +20,17 @@
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>Invoice ID</th>
-                    <th>Company ID</th>
-                    <th>Company Name</th>
-                    <th>Serial No</th>
-                    <th>Date</th>
-                    <th>Total Value</th>
+                    <th>Order Number</th>
+                    <th>User Assigned</th>
+                    <th>Status</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="order in mCtrl.OrderList"> <!-- ng-repeat -->
-                    <td>{{order.id}}</td>
-                    <td>{{order.company_id}}</td>
-                    <td>{{order._name}}</td>
-                    <td>{{order.serial_no}}</td>
-                    <td>{{order.date}}</td>
-                    <td>{{order.total_value}}</td>
+                <tr ng-repeat="order in mCtrl.OrderList | orderBy:'orderNumber' | filter:search:strict">
+                    <!-- ng-repeat -->
+                    <td>{{order.orderNumber}}</td>
+                    <td>{{order.userName}}</td>
+                    <td>{{order.status === "1" ? "Done" : "Waiting"}}</td>
                 </tr>
                 </tbody>
             </table>
