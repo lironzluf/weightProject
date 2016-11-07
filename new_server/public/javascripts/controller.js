@@ -7,27 +7,10 @@
             $rootScope.ID = '';
             $rootScope.NAME = '';
 
-            mCtrl.CompanyList = {};
-            mCtrl.BrandList = {};
-            mCtrl.PartModels = {};
-            mCtrl.PartList = {};
-            mCtrl.RepairList = {};
-            mCtrl.ClientList = {};
-            mCtrl.InvoiceList = {};
+            mCtrl.UserList = {};
+            mCtrl.OrderList = {};
 
-            mCtrl.initCompanyList = function(){
-                $('#successAlert').fadeOut('fast');
-                $rootScope.layout.loading = true;
-                try {
-                    mCtrl.CompanyList = $route.current.locals.initData;
-                    //console.log(mCtrl.CompanyList);
-                }
-                catch (e){
-                    console.log(e);
-                }
-                $rootScope.layout.loading = false;
-            };
-
+/*
             mCtrl.deleteCompany = function(){
                 $rootScope.layout.loading = true;
                 try{
@@ -104,111 +87,9 @@
                 }
                 $rootScope.layout.loading = false;
             };
+            */
 
-            mCtrl.initBrandList = function(){
-                $('#successAlert').fadeOut('fast');
-                $rootScope.layout.loading = true;
-                try {
-                    mCtrl.BrandList = $route.current.locals.initData;
-                    //console.log(mCtrl.CompanyList);
-                }
-                catch (e){
-                    console.log(e);
-                }
-                $rootScope.layout.loading = false;
-            };
-
-            mCtrl.deleteBrand = function(){
-                $rootScope.layout.loading = true;
-                try{
-                    Factory.deleteBrand($rootScope.ID,$rootScope.NAME).success(function(){
-                        $('#successAlert').fadeIn('slow');
-                    }).error(function(e){
-                        console.log(e);
-                    });
-                }
-                catch(e){
-                    console.log(e);
-                }
-                $rootScope.layout.loading = false;
-            };
-
-            mCtrl.addBrand = function(){
-                $rootScope.layout.loading = true;
-                try{
-                    Factory.addBrand($rootScope.ID,$rootScope.NAME).success(function(){
-                        //console.log('success');
-                        $('#successAlert').fadeIn('slow');
-                    }).error(function(e){
-                        console.log(e);
-                    });
-                }
-                catch(e){
-                    console.log(e);
-                }
-                // Reset the form model.
-                $rootScope.ID = '';
-                $rootScope.NAME = '';
-                // Since Angular 1.3, set back to untouched state.
-                //mCtrl.form.$setUntouched();
-                $rootScope.layout.loading = false;
-            };
-
-            mCtrl.updateBrand = function(){
-                $rootScope.layout.loading = true;
-                try{
-                    Factory.updateBrand($rootScope.ID,$rootScope.NAME).success(function(){
-                        //console.log('success');
-                        $('#successAlert').fadeIn('slow');
-                    }).error(function(e){
-                        console.log(e);
-                    });
-                }
-                catch(e){
-                    console.log(e);
-                }
-                // Reset the form model.
-                $rootScope.ID = '';
-                $rootScope.NAME = '';
-                // Since Angular 1.3, set back to untouched state.
-                //mCtrl.form.$setUntouched();
-                $rootScope.layout.loading = false;
-            };
-
-            mCtrl.searchBrand = function(){
-                $rootScope.layout.loading = true;
-                try{
-                    mCtrl.CompanyList = {};
-                    Factory.searchBrand($rootScope.ID,$rootScope.NAME).success(function(data){
-                        //console.log(data);
-                        if (typeof data != 'undefined') {
-                            mCtrl.BrandList = data;
-                            $('#searchResults').fadeIn('slow');
-                        }
-                    }).error(function(e){
-                        console.log(e);
-                    });
-                }
-                catch(e){
-                    console.log(e);
-                }
-                $rootScope.layout.loading = false;
-            };
-
-            mCtrl.initPartModels = function(){
-                $('#successAlert').fadeOut('fast');
-                $rootScope.layout.loading = true;
-                try {
-                    mCtrl.PartModels = $route.current.locals.initData;
-                    //console.log(mCtrl.CompanyList);
-                }
-                catch (e){
-                    console.log(e);
-                }
-                $rootScope.layout.loading = false;
-            };
-
-            mCtrl.initPartList = function(){
+            mCtrl.initItemList = function(){
                 $('#successAlert').fadeOut('fast');
                 $rootScope.layout.loading = true;
                 try {
@@ -234,13 +115,13 @@
                 $rootScope.layout.loading = false;
             };
 
-            mCtrl.initClientList = function(){
+            mCtrl.initUserList = function(){
                 $('#successAlert').fadeOut('fast');
                 $rootScope.layout.loading = true;
                 try {
                     var data = $route.current.locals.initData;
                     if (data.status) {
-                        mCtrl.ClientList = $route.current.locals.initData.data;
+                        mCtrl.UserList = $route.current.locals.initData.data;
                     }
                 }
                 catch (e){
