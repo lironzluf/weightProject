@@ -11,90 +11,11 @@
         $rootScope.user = {};
         $rootScope.loginData = {};
       }
+
       mCtrl.UserList = [];
       mCtrl.OrderList = [];
 
-      /*
-       mCtrl.deleteCompany = function(){
-       $rootScope.layout.loading = true;
-       try{
-       Factory.deleteCompany($rootScope.ID,$rootScope.NAME).success(function(){
-       $('#successAlert').fadeIn('slow');
-       }).error(function(e){
-       console.log(e);
-       });
-       }
-       catch(e){
-       console.log(e);
-       }
-       $rootScope.layout.loading = false;
-       };
-
-       mCtrl.addCompany = function(){
-       $rootScope.layout.loading = true;
-       try{
-       Factory.addCompany($rootScope.ID,$rootScope.NAME).success(function(){
-       //console.log('success');
-       $('#successAlert').fadeIn('slow');
-       }).error(function(e){
-       console.log(e);
-       });
-       }
-       catch(e){
-       console.log(e);
-       }
-       // Reset the form model.
-       $rootScope.ID = '';
-       $rootScope.NAME = '';
-       // Since Angular 1.3, set back to untouched state.
-       //mCtrl.form.$setUntouched();
-       $rootScope.layout.loading = false;
-       };
-
-       mCtrl.updateCompany = function(){
-       $rootScope.layout.loading = true;
-       try{
-       Factory.updateCompany($rootScope.ID,$rootScope.NAME).success(function(){
-       //console.log('success');
-       $('#successAlert').fadeIn('slow');
-       }).error(function(e){
-       console.log(e);
-       });
-       }
-       catch(e){
-       console.log(e);
-       }
-       // Reset the form model.
-       $rootScope.ID = '';
-       $rootScope.NAME = '';
-       // Since Angular 1.3, set back to untouched state.
-       //mCtrl.form.$setUntouched();
-       $rootScope.layout.loading = false;
-       };
-
-       mCtrl.searchCompany = function(){
-       $rootScope.layout.loading = true;
-       try{
-       mCtrl.CompanyList = {};
-       Factory.searchCompany($rootScope.ID,$rootScope.NAME).success(function(data){
-       console.log(data);
-       if (typeof data != 'undefined') {
-       mCtrl.CompanyList = data;
-       $('#searchResults').fadeIn('slow');
-       }
-       }).error(function(e){
-       console.log(e);
-       });
-       }
-       catch(e){
-       console.log(e);
-       }
-       $rootScope.layout.loading = false;
-       };
-       */
-
       mCtrl.initItemList = function () {
-        $('#successAlert').fadeOut('fast');
         $rootScope.layout.loading = true;
         try {
           mCtrl.ItemList = $route.current.locals.initData.data;
@@ -108,7 +29,6 @@
 
 
       mCtrl.initUserList = function () {
-        $('#successAlert').fadeOut('fast');
         $rootScope.layout.loading = true;
         try {
           var data = $route.current.locals.initData;
@@ -124,7 +44,6 @@
 
 
       mCtrl.initOrderList = function () {
-        $('#successAlert').fadeOut('fast');
         $rootScope.layout.loading = true;
         try {
           var tempArr = $route.current.locals.initData.data;
@@ -132,7 +51,7 @@
           for (var i = 0; i < tempArr.length; i++) {
             tempArr2[tempArr[i].orderNumber] = tempArr[i];
           }
-          for (order in tempArr2) {
+          for (var order in tempArr2) {
             mCtrl.OrderList.push(tempArr2[order]);
           }
         }
@@ -151,7 +70,6 @@
             .success(function (data) {
               if (data.status) {
                 if (data.user.securityLevel !== "3") {
-                  console.log(data.user.securityLevel);
                   $rootScope.loginData.errMsg = "You don't have permission to enter the admin panel";
                   $rootScope.user = {};
                   $rootScope.userId = -1;
@@ -176,6 +94,28 @@
         }
         else {
           $rootScope.loginData.errMsg = "Please fill in these required fields";
+        }
+      };
+
+
+      mCtrl.insertNewUser = function () {
+        var formData = $rootScope.formData;
+        if (formData && formData.userName && formData.password && !isNaN(formData.securityLevel)) {
+          Factory.insertNewUser(formData)
+            .success(function (data) {
+              $rootScope.formData.errMsg = null;
+              $rootScope.formData = {};
+              $rootScope.formData.successMsg = "Successfully Added";
+            })
+            .error(function (e) {
+              $rootScope.formData.successMsg = null;
+              $rootScope.formData.errMsg = "Error inserting new user";
+              console.log(e);
+            })
+        }
+        else {
+          $rootScope.formData.successMsg = null;
+          $rootScope.formData.errMsg = "Please fill all necessary fields";
         }
       };
 

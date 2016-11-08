@@ -1,0 +1,39 @@
+<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}">
+    <div class="card">
+        <div class="card-header">
+            <h2>Add new User</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="card-header card-body">
+            <div class="alert alert-danger" ng-show="formData.errMsg">{{formData.errMsg}}</div>
+            <div class="alert alert-success" ng-show="formData.successMsg">{{formData.successMsg}}</div>
+            <form ng-submit="mCtrl.insertNewUser()">
+                <div class="list" style="background:none;">
+                    <label class="form-group">
+                        <span class="input-label">Username</span>
+                        <input type="text" class="form-control" ng-model="formData.userName">
+                    </label><br/>
+                    <label class="form-group">
+                        <span class="input input-label">Password</span>
+                        <input type="password" class="form-control" ng-model="formData.password">
+                    </label><br/>
+                    <label class="form-group">
+                        <span class="input input-label">NFC</span>
+                        <input type="text" class="form-control" ng-model="formData.nfc">
+                    </label><br/>
+                    <label class="form-group">
+                        <span class="input input-label">Security Level</span><br/>
+                        <select ng-model="formData.securityLevel">
+                            <option value="1">User</option>
+                            <option value="2">Manager</option>
+                            <option value="3">Admin</option>
+                        </select>
+                    </label><br/><br/>
+                    <label class="item" style="background:none;border:0;">
+                        <button class="btn btn-primary" type="submit">ADD USER</button>
+                    </label>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
