@@ -121,7 +121,7 @@ router.post('/deleteuser', function(req,res){
   db.UserFunctions.deleteUser(userName)
     .done(function(data){
 		resObj.status = true;		
-		resObj.data = data
+		resObj.data = data;
 		res.json(resObj);
     },function(err){
 		res.json(resObj);

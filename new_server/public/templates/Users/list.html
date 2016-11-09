@@ -7,6 +7,8 @@
             </div>
             <h2>Users List <small>List of all the users in the database</small></h2>
             <div class="clearfix"></div>
+            <div class="alert alert-danger" ng-show="formData.errMsg">{{formData.errMsg}}</div>
+            <div class="alert alert-success" ng-show="formData.successMsg">{{formData.successMsg}}</div>
         </div>
         <div class="table-responsive">
             <table class="table table-striped">
@@ -16,6 +18,7 @@
                     <th>UserName</th>
                     <th>Security Level</th>
                     <th>NFC</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,6 +27,7 @@
                     <td>{{user.userName}}</td>
                     <td>{{user.securityLevel}}</td>
                     <td>{{user.nfc}}</td>
+                    <td><i class="glyphicon glyphicon-user" aria-hidden="true" ng-click="mCtrl.deleteUser(user.userName)"></i></td>
                 </tr>
                 </tbody>
             </table>

@@ -324,7 +324,7 @@ var app = (function () {
         }
       })
       .when('/Users', {
-        templateUrl: './templates/users.html?ver=' + date,
+        templateUrl: './templates/Users/list.html?ver=' + date,
         resolve: {
           initData: function ($q, $http, $route) {
             var defer = $q.defer(); // create a promise object
@@ -346,6 +346,9 @@ var app = (function () {
             return defer.promise; // return promise object
           }
         }
+      })
+      .when('/Users/add', {
+        templateUrl: './templates/Users/add.html?ver=' + date
       })
       .otherwise({
         templateUrl: './templates/404.html?ver=' + date
@@ -370,12 +373,15 @@ var app = (function () {
       });
 
       $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+
+        $rootScope.formData = {};
+
         //show loading gif
         $timeout(function(){
           $rootScope.layout.loading = true;
         });
 
-        if ($rootScope.firstLoad){
+        if ($rootScope.firstLoad && $rootScope.userId !== -1){
           $rootScope.firstLoad = false;
         }
         else {
@@ -404,8 +410,11 @@ var app = (function () {
                         $rootScope.userId = data.user._id;
                         $rootScope.user = data.user;
                         $rootScope.userName = data.user.userName;
-                        $location.path('/home');
                         localStorage.userId = $rootScope.userId;
+                        if (next.templateUrl === "/templates/login.html?ver=" + date)
+                        {
+                          $location.path('/home');
+                        }
                       }
                     }
                     else { // user not found, refer to login
