@@ -16,7 +16,7 @@ router.post('/insertnewweight', function (req, res) {
   db.weightFunctions.insertNewWeight(weight)
     .done(function (data) {
       resObj.status = true;
-      resObj.data = data
+      resObj.data = data;
       res.json(resObj);
     }, function (err) {
       res.json(resObj);
@@ -31,7 +31,7 @@ router.post('/deleteweight', function (req, res) {
   db.weightFunctions.deleteWeight(userName, date)
     .done(function (data) {
       resObj.status = true;
-      resObj.data = data
+      resObj.data = data;
       res.json(resObj);
     }, function (err) {
       res.json(resObj);

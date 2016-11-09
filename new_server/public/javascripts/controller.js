@@ -195,41 +195,6 @@
         mCtrl.currentUserIndex = -1;
       };
 
-
-      mCtrl.initmyWeightList = function () {
-        $('#successAlert').fadeOut('fast');
-        $rootScope.layout.loading = true;
-        try {
-          var data = $route.current.locals.initData;
-          if (data.status) {
-            mCtrl.myWeightList = $route.current.locals.initData.data;
-          }
-          //console.log(mCtrl.CompanyList);
-        } catch (e) {
-          console.log(e);
-        }
-        $rootScope.layout.loading = false;
-      };
-
-      mCtrl.searchmyWeight = function () {
-        $rootScope.layout.loading = true;
-        try {
-          mCtrl.CompanyList = {};
-          Factory.searchmyWeight($rootScope.ID, $rootScope.WEIGHT).success(function (data) {
-            //console.log(data);
-            if (typeof data != 'undefined') {
-              mCtrl.myWeightList = data;
-              $('#searchResults').fadeIn('slow');
-            }
-          }).error(function (e) {
-            console.log(e);
-          });
-        } catch (e) {
-          console.log(e);
-        }
-        $rootScope.layout.loading = false;
-      };
-
       $document.ready(function () {
         //document ready functions
       });
