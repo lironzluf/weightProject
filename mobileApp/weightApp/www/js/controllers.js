@@ -33,7 +33,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $scope.autoLoginMsg = "Hello " + $scope.user.userName + ", You have been logged in automatically";
               $state.go('app.taskSelection');
               $scope.initTasks();
-              $scope.initMyWeights();
             }
             else { // user not found, refer to login
               $scope.userId = -1;
@@ -76,7 +75,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
       var userId = $scope.loginData.userId;
       var password = $scope.loginData.password;
-      if (userId && password && userId.length > 0 & password.length > 0) {
+      if (userId && password && userId.length > 0 && password.length > 0) {
         AppFactory.loginUser(userId, password)
           .success(function (data) {
             console.log(data);
@@ -87,7 +86,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
               localStorage.userId = $scope.userId;
               $scope.initTasks();
-              $scope.initMyWeights();
             }
             else {
               $scope.alertPopup("Incorrect Username or Password");
@@ -561,6 +559,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $scope.userId = -1;
       $scope.user = {};
       $scope.loginData = {};
+      $scope.tasks = [];
       localStorage.removeItem('userId');
       $scope.alertPopup("Logged out successfully");
       $state.go('app.login');

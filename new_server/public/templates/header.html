@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <div toggle-class="open" class="menu-trigger" ng-click="hCtrl.sideMenuToggle()">
+            <div toggle-class="open" class="menu-trigger" ng-click="hCtrl.sideMenuToggle()" ng-style="userId == -1 && {'visibility': 'hidden'}">
                 <div class="line-wrap">
                     <span class="line top"></span>
                     <span class="line center"></span>
@@ -24,18 +24,23 @@
     </div>
 </nav>
 
-<aside id="sideBar">
+<aside id="sideBar" ng-show="userId !== -1">
     <div class="profile-menu">
         <a href="">
             <div class="profile-pic" style="display:inline-block">
                 <img src="img/profile-pics/1.jpg" alt="">
             </div>
+<<<<<<< HEAD
             <div class="profile-pic" style="display:inline-block">
                 <img src="img/profile-pics/2.jpg" alt="">
             </div>
             <div class="profile-info">Liron Zluf & Eyal Fridman
                 <i class="material-icons hide">keyboard_arrow_down</i>
             </div>
+=======
+            <div class="profile-info">Hi {{userName}}!</div>
+
+>>>>>>> 346e051a259d8e7b424d04b73f3eb150c7b27a04
         </a>
     </div>
     <ul class="main-menu">
@@ -101,6 +106,10 @@
                     <a class="active" href="#/Parts/repair">Repair List</a>
                 </li>
             </ul>
+        </li>
+        <li>
+            <a href="#/login" ng-click="hCtrl.logout()">
+                <i class="glyphicon glyphicon-off" aria-hidden="true" style="left:14px"></i>Logout</a>
         </li>
     </ul>
 </aside>

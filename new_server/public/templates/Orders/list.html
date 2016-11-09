@@ -1,0 +1,39 @@
+<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}"
+     ng-init="mCtrl.initOrderList()">
+    <div class="card">
+        <div class="card-header">
+            <div style="float:right">
+                <h2>
+                    <small>Search order by ID or User Assigned</small>
+                </h2>
+                <input type="text" ng-model="search.$"/>
+            </div>
+            <h2>Order List
+                <small>List of all the orders in the database</small>
+                <br/></h2>
+            <input type="checkbox" ng-model="search.status" ng-true-value="" ng-false-value="0">
+            <small>Show Done</small>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Order Number</th>
+                    <th>User Assigned</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="order in mCtrl.OrderList | orderBy:'orderNumber' | filter:search:strict">
+                    <!-- ng-repeat -->
+                    <td>{{order.orderNumber}}</td>
+                    <td>{{order.userName}}</td>
+                    <td>{{order.status === "1" ? "Done" : "Waiting"}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

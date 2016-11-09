@@ -4,6 +4,7 @@ var router = express.Router();
 var db = require('../db');
 var Promise = require('promise');
 
+<<<<<<< HEAD
 router.post('/insertnewweight', function(req,res){
 	 //insert new weight
   var weight = {"userName" : req.body.userName, "date" : req.body.date, "weight" : req.body.weight,"latitude" : req.body.latitude,"longitude" : req.body.longitude}
@@ -15,6 +16,25 @@ router.post('/insertnewweight', function(req,res){
 		res.json(resObj);
     },function(err){
 		res.json(resObj);
+=======
+router.post('/insertnewweight', function (req, res) {
+  //insert new weight
+  var weight = {
+    "userName": req.body.userName,
+    "date": req.body.date,
+    "weight": req.body.weight,
+    "latitude": req.body.latitude,
+    "longitude": req.body.longitude
+  };
+  var resObj = {status: false};
+  db.weightFunctions.insertNewWeight(weight)
+    .done(function (data) {
+      resObj.status = true;
+      resObj.data = data;
+      res.json(resObj);
+    }, function (err) {
+      res.json(resObj);
+>>>>>>> 346e051a259d8e7b424d04b73f3eb150c7b27a04
     });
 });
 

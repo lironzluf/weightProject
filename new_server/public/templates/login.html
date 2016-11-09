@@ -1,0 +1,28 @@
+<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}">
+    <div class="col-sm m-t-10">
+        <div class="card" style="height:auto;">
+            <div class="card-header">
+                <h2>Login<small>Enter your User name and password to continue
+                </small></h2>
+            </div>
+            <div class="card-header card-body">
+                <div class="alert alert-danger" ng-show="loginData.errMsg">{{loginData.errMsg}}</div>
+                <form ng-submit="mCtrl.doLogin()">
+                    <div class="list" style="background:none;">
+                        <label class="form-group">
+                            <span class="input-label">Username</span>
+                            <input type="text" class="form-control" ng-model="loginData.userId">
+                        </label><br/>
+                        <label class="form-group">
+                            <span class="input input-label">Password</span>
+                            <input type="password" class="form-control" ng-model="loginData.password">
+                        </label><br/>
+                        <label class="item" style="background:none;border:0;">
+                            <button class="btn btn-primary" type="submit">Log in</button>
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

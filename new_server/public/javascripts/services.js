@@ -4,6 +4,7 @@
     app.factory('Factory', ['$http', '$q', function ($http, $q)
     {
         return {
+<<<<<<< HEAD
 
              deleteCompany: function (ID,NAME)
             {
@@ -114,14 +115,29 @@
                 return $http({ // ajax http call
                     method: 'POST',
                     url: 'https://weightproject.herokuapp.com/',
+=======
+            loginUser: function(userName,password){
+                return $http({ // ajax http call
+                    method: 'POST',
+                    url: serverUrl + 'users/login',
+>>>>>>> 346e051a259d8e7b424d04b73f3eb150c7b27a04
                     cache: false,
                     data: {
-                        action: 'ShowInvoiceById',
-                        ID: ID,
-                        NAME: NAME
+                        userName: userName,
+                        password: password
                     }
                 });
-            }
+            },
+            loginUserById: function(userId){
+                return $http({ // ajax http call
+                    method: 'POST',
+                    url: serverUrl + 'users/loginbyid',
+                    cache: false,
+                    data: {
+                        userId: userId
+                    }
+                });
+            },
 
 
         }
