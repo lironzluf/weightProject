@@ -20,65 +20,33 @@
                 <li><a href="../navbar-static-top/">Static top</a></li>
                 <li><a href="./">Fixed top <span class="sr-only">(current)</span></a></li>
             </ul>
-        </div><!--/.nav-collapse -->
+        </div>
     </div>
 </nav>
 
-<aside id="sideBar" ng-show="userId !== -1">
+<aside id="sideBar">
     <div class="profile-menu">
         <a href="">
             <div class="profile-pic" style="display:inline-block">
                 <img src="img/profile-pics/1.jpg" alt="">
             </div>
-<<<<<<< HEAD
-            <div class="profile-pic" style="display:inline-block">
-                <img src="img/profile-pics/2.jpg" alt="">
-            </div>
-            <div class="profile-info">Liron Zluf & Eyal Fridman
-                <i class="material-icons hide">keyboard_arrow_down</i>
-            </div>
-=======
             <div class="profile-info">Hi {{userName}}!</div>
 
->>>>>>> 346e051a259d8e7b424d04b73f3eb150c7b27a04
         </a>
     </div>
     <ul class="main-menu">
         <li class="active">
             <a href="#/home">
-            <i class="material-icons">home</i> Home</a>
-        </li>
-        <li>
-            <a href="#/clients">
-                <i class="material-icons">people</i> Clients</a>
-        </li>
-        <li class="sub-menu"  toggle-class="active">
-            <a href="" ng-click="hCtrl.toggleDrop($event)">
-                <i class="material-icons">business</i>Companies
-                <span class="pull-right"><i class="material-icons">expand_more</i></span></a>
-
-            <ul class="animated hide">
-                <li>
-                    <a class="active" href="#/Companies/list">List</a>
-                    <a class="active" href="#/Companies/add">Add</a>
-                    <a class="active" href="#/Companies/update">Update</a>
-                    <a class="active" href="#/Companies/search">Search</a>
-                    <a class="active" href="#/Companies/delete">Delete</a>
-                </li>
-            </ul>
+                <i class="glyphicon glyphicon-home" aria-hidden="true" style="left:14px"></i>Home</a>
         </li>
         <li class="sub-menu" toggle-class="active">
             <a href="" ng-click="hCtrl.toggleDrop($event)">
-                <i class="material-icons">business</i>Brands
+                <i class="glyphicon glyphicon-user" aria-hidden="true" style="left:14px"></i>Users
                 <span class="pull-right"><i class="material-icons">expand_more</i></span></a>
 
             <ul class="animated hide">
                 <li>
-                    <a class="active" href="#/Brands/list">List</a>
-                    <a class="active" href="#/Brands/add">Add</a>
-                    <a class="active" href="#/Brands/update">Update</a>
-                    <a class="active" href="#/Brands/search">Search</a>
-                    <a class="active" href="#/Brands/delete">Delete</a>
+                    <a class="active" href="#/Users">List</a>
                 </li>
                 <li>
                     <a class="active" href="#/Users/add">Add</a>
@@ -87,26 +55,23 @@
         </li>
         <li class="sub-menu" toggle-class="active">
             <a href="" ng-click="hCtrl.toggleDrop($event)">
-                <i class="glyphicon glyphicon-list-alt" aria-hidden="true" style="left:14px"></i>Invoices
+                <i class="glyphicon glyphicon-list-alt" aria-hidden="true" style="left:14px"></i>Orders
                 <span class="pull-right"><i class="material-icons">expand_more</i></span></a>
 
             <ul class="animated hide">
                 <li>
-                    <a class="active" href="#/Invoices/list">List</a>
-                    <a class="active" href="#/Invoices/search">Search</a>
+                    <a class="active" href="#/Orders/list">List</a>
                 </li>
             </ul>
         </li>
         <li class="sub-menu" toggle-class="active">
             <a href="" ng-click="hCtrl.toggleDrop($event)">
-                <i class="material-icons">build</i>Parts
+                <i class="material-icons">build</i>Items
                 <span class="pull-right"><i class="material-icons">expand_more</i></span></a>
 
             <ul class="animated hide">
                 <li>
-                    <a class="active" href="#/Parts/part">Parts List</a>
-                    <a class="active" href="#/Parts/model">Model List</a>
-                    <a class="active" href="#/Parts/repair">Repair List</a>
+                    <a class="active" href="#/Items/list">List</a>
                 </li>
             </ul>
         </li>
