@@ -103,9 +103,15 @@
         if (formData && formData.userName && formData.password && !isNaN(formData.securityLevel)) {
           Factory.insertNewUser(formData)
             .success(function (data) {
-              $rootScope.formData.errMsg = null;
-              $rootScope.formData = {};
-              $rootScope.formData.successMsg = "Successfully Added";
+              if (data.status) {
+                $rootScope.formData.errMsg = null;
+                $rootScope.formData = {};
+                $rootScope.formData.successMsg = "Successfully Added";
+              }
+              else {
+                $rootScope.formData.successMsg = null;
+                $rootScope.formData.errMsg = "Error inserting new user";
+              }
             })
             .error(function (e) {
               $rootScope.formData.successMsg = null;
@@ -117,6 +123,75 @@
           $rootScope.formData.successMsg = null;
           $rootScope.formData.errMsg = "Please fill all necessary fields";
         }
+      };
+
+      mCtrl.deleteUser = function (index) {
+        Factory.deleteUser(mCtrl.UserList[index].userName)
+          .success(function (data) {
+            if (data.status) {
+              $rootScope.formData.errMsg = null;
+              $rootScope.formData = {};
+              $rootScope.formData.successMsg = "Successfully Removed";
+              try {
+                mCtrl.UserList.splice(index, 1);
+              }
+              catch (e) {
+              }
+            }
+            else {
+              $rootScope.formData.successMsg = null;
+              $rootScope.formData.errMsg = "Error removing user";
+            }
+          })
+          .error(function (e) {
+            $rootScope.formData.successMsg = null;
+            $rootScope.formData.errMsg = "Error removing user";
+            console.log(e);
+          });
+      };
+
+      mCtrl.popBlocker = function (index) {
+        mCtrl.editMode = true;
+        mCtrl.currentUserIndex = index;
+      };
+
+      mCtrl.editUser = function () {
+        mCtrl.closeBlocker();
+        var user = mCtrl.UserList[mCtrl.currentUserIndex];
+        if (user && user.newPassword.length > 0 && user.userName && user.securityLevel) {
+          Factory.editUser()
+            .success(function (data) {
+              if (data.status) {
+                $rootScope.formData.errMsg = null;
+                $rootScope.formData = {};
+                $rootScope.formData.successMsg = "Changed Successfully";
+                try {
+                  mCtrl.UserList.splice(index, 1);
+                }
+                catch (e) {
+                }
+              }
+              else {
+                $rootScope.formData.successMsg = null;
+                $rootScope.formData.errMsg = "Error editing user";
+              }
+            })
+            .error(function (e) {
+              $rootScope.formData.successMsg = null;
+              $rootScope.formData.errMsg = "Error editing user";
+              console.log(e);
+            });
+        }
+        else {
+          $rootScope.formData.successMsg = null;
+          $rootScope.formData.errMsg = "Please fill all necessary fields";
+        }
+      };
+
+
+      mCtrl.closeBlocker = function () {
+        mCtrl.editMode = false;
+        mCtrl.currentUserIndex = -1;
       };
 
       $document.ready(function () {

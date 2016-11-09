@@ -7,8 +7,10 @@
             </div>
             <h2>Users List <small>List of all the users in the database</small></h2>
             <div class="clearfix"></div>
-            <div class="alert alert-danger" ng-show="formData.errMsg">{{formData.errMsg}}</div>
-            <div class="alert alert-success" ng-show="formData.successMsg">{{formData.successMsg}}</div>
+            <div class="m-t-10">
+                <div class="alert alert-danger" ng-show="formData.errMsg">{{formData.errMsg}}</div>
+                <div class="alert alert-success" ng-show="formData.successMsg">{{formData.successMsg}}</div>
+            </div>
         </div>
         <div class="table-responsive">
             <table class="table table-striped">
@@ -27,10 +29,50 @@
                     <td>{{user.userName}}</td>
                     <td>{{user.securityLevel}}</td>
                     <td>{{user.nfc}}</td>
-                    <td><i class="glyphicon glyphicon-user" aria-hidden="true" ng-click="mCtrl.deleteUser(user.userName)"></i></td>
+                    <td><i class="glyphicon glyphicon-trash" aria-hidden="true" ng-click="mCtrl.deleteUser($index)" style="cursor:pointer"></i>
+                        <i class="glyphicon glyphicon-pencil" aria-hidden="true" ng-click="mCtrl.popBlocker($index)" style="cursor:pointer"></i>
+                    </td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
+    <div class="m-t-10">
+        <div class="alert alert-danger" ng-show="formData.errMsg">{{formData.errMsg}}</div>
+        <div class="alert alert-success" ng-show="formData.successMsg">{{formData.successMsg}}</div>
+    </div>
+
+
+    <div class="edit-blocker card" ng-show="mCtrl.editMode">
+        <form ng-submit="mCtrl.editUser(mCtrl.currentUserIndex)">
+            <div class="list" style="background:none;">
+                <label class="form-group">
+                    <span class="input-label">Username:</span>
+                    {{mCtrl.UserList[mCtrl.currentUserIndex].userName}}
+                </label><br/>
+                <label class="form-group">
+                    <span class="input-label">Password:</span>
+                    <input type="text" class="form-control" ng-model="mCtrl.UserList[mCtrl.currentUserIndex].newPassword">
+                </label><br/>
+                <label class="form-group">
+                    <span class="input input-label">Security Level:</span><br/>
+                    <select ng-model="mCtrl.UserList[mCtrl.currentUserIndex].securityLevel">
+                        <option value="1">User</option>
+                        <option value="2">Manager</option>
+                        <option value="3">Admin</option>
+                    </select>
+                </label><br/>
+                <label class="form-group">
+                    <span class="input-label">NFC:</span>
+                    <input type="text" class="form-control" ng-model="mCtrl.UserList[mCtrl.currentUserIndex].nfc">
+                </label><br/><br/>
+                <label class="item" style="background:none;border:0;">
+                    <button class="btn btn-primary" type="submit">EDIT USER</button>
+                </label>
+            </div>
+        </form>
+        <div class="closeButton" ng-click="mCtrl.closeBlocker()">X</div>
+    </div>
+
 </div>
