@@ -1,0 +1,45 @@
+<div class="container" ng-class="{'menuOpen': $root.menuOpen, 'menuClosed': $root.menuOpen === false}">
+    <div class="card">
+        <div class="card-header">
+            <h2>Search myWeight <small>myWeight ID must be an integer
+            </small></h2>
+        </div>
+
+        <div class="card-body card-padding">
+            <form role="form" class="ng-pristine ng-valid" ng-submit="mCtrl.searchmyWeight()">
+                <div class="form-group fg-line">
+                    <label for="ID">myWeight ID</label>
+                    <input type="text" class="form-control input-sm" name="ID" id="ID" ng-model="$root.ID" placeholder="Enter myWeight ID">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm m-t-10 waves-effect">Search</button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <div class="card" style="display:none" id="searchResults">
+        <div class="card-header">
+            <h2>Matching myWeight <small></small></h2>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>myWeight ID</th>
+                        <th>date</th>
+                        <th>weight</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{mCtrl.myWeight[0].id}}</td>
+                        <td>{{mCtrl.myWeight[0].date}}</td>
+                        <td>{{mCtrl.myWeight[0].weight}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
