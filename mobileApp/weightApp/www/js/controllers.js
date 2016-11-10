@@ -672,6 +672,32 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
     };
 
 
+    $scope.scanBarcode = function(){
+      if (window.cordova && window.cordova.plugins && window.cordova.plugins.barcodeScanner) {
+        window.cordova.plugins.barcodeScanner.scan(
+          function (result) {
+            console.log("We got a barcode\n" +
+              "Result: " + result.text + "\n" +
+              "Format: " + result.format + "\n" +
+              "Cancelled: " + result.cancelled);
+            $scope.checkLocation(result.text);
+          },
+          function (error) {
+            $scope.alertPopup("Scanning failed: ", error);
+          },
+          {
+            "preferFrontCamera": false, // iOS and Android
+            "showFlipCameraButton": true, // iOS and Android
+            "prompt": "Place a barcode inside the scan area", // supported on Android only
+            "orientation": "landscape" // Android only (portrait|landscape), default unset so it rotates with the device
+          }
+        );
+      }
+      else {
+        $scope.alertPopup("Error","Barcode scanning is disabled for your device");
+      }
+    };
+
     /**
      * nfc :: Event Handler
      * description: Listens for an NFC tag event
@@ -682,8 +708,13 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
           function (nfcEvent) {
             var tag = nfcEvent.tag;
             var tagId = nfc.bytesToHexString(tag.id);
-            $scope.alertPopup('NFC Detected');
-            $scope.doLoginByNFC(tagId);
+            if (!$scope.user) {
+              $scope.alertPopup('NFC Detected','Logging in...');
+              $scope.doLoginByNFC(tagId);
+            }
+            else {
+              $scope.alertPopup('NFC Detected', 'User already logged in');
+            }
           },
           function () { // success callback
             // alert("Waiting for NDEF tag");

@@ -5,7 +5,8 @@
       <p>Please pick up the item from location:</p>
       <p>{{currentTask[currentItemIdx].location}}</p>
       <div class="weigh-buttons">
-        <button class="button button-light button-assertive" ng-click="showLocationPopup()">ARRIVED AT LOCATION</button>
+          <button class="button button-light button-assertive" ng-click="scanBarcode()">SCAN BARCODE</button>
+          <button class="button button-light button-assertive" ng-click="showLocationPopup()">ENTER MANUALLY</button>
       </div>
     </div>
   </ion-content>
