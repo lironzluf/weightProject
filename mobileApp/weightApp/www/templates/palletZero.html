@@ -1,0 +1,23 @@
+<ion-view view-title="TASKS">
+  <ion-content>
+    <div class="container">
+      <div ng-show="!isConnected">
+        Connecting to the indicator...<br/><br/>
+        <ion-spinner></ion-spinner>
+        <br/><br/>
+        <img src="img/indicator.png" style="width:80%;"/>
+        <div class="weigh-buttons">
+          <button class="button button-full button-assertive" ng-click="goToSettings()">Change Settings</button>
+        </div>
+      </div>
+      <div ng-show="isConnected">
+        <b>Please place a pallet and lift the forks</b><br/><br/>
+        <img src="img/pallet.png" style="width:80%;"/>
+        <br/><br/>
+        <div class="weigh-buttons">
+          <button class="button button-full button-assertive" ng-click="tareAndGoToTask()">CONTINUE</button>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

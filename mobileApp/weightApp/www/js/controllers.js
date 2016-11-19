@@ -1,6 +1,6 @@
 angular.module('weightapp.controllers', ['weightapp.factory'])
 
-  .controller('AppCtrl', function ($scope, $ionicModal, $ionicHistory, $ionicPopup, $timeout, $state, AppFactory, $ionicPlatform) {
+  .controller('AppCtrl', function ($rootScope, $scope, $ionicModal, $ionicHistory, $ionicPopup, $timeout, $state, AppFactory, $ionicPlatform) {
 
     /**
      * initApp :: function
@@ -10,62 +10,18 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
       // defaults and inits
       $scope.socket = {};
-      $scope.host = '192.168.0.101';
-      $scope.port = 2101;
+      $rootScope.host = '192.168.0.101';
+      $rootScope.port = 2101;
       $scope.isConnected = false;
       $scope.weight = 0;
       $scope.firstTime = true;
       $scope.data = '';
       $scope.tasks = [];
-      $scope.userId = -1;
       $scope.loading = true;
       $scope.myWeights = [];
-
-      // if localStorage holds a userId -> user has been previously logged -> log the user in
-      if (localStorage.userId) {
-        $scope.userId = localStorage.userId;
-        console.log('Found userId in localStorage: ' + $scope.userId);
-        AppFactory.loginUserById($scope.userId)
-          .success(function (data) {
-            console.log(data);
-            if (data.status) {
-              $scope.user = data.user;
-              $scope.autoLoginMsg = "Hello " + $scope.user.userName + ", You have been logged in automatically";
-              $state.go('app.taskSelection');
-              $scope.initTasks();
-            }
-            else { // user not found, refer to login
-              $scope.userId = -1;
-              $state.go('app.login');
-            }
-          })
-      }
-
-      // get host and port defaults from localStorage if exists
-      if (localStorage.host) {
-        $scope.host = localStorage.host;
-      }
-
-      if (localStorage.port) {
-        $scope.port = localStorage.port;
-      }
+      $scope.loginData = {};
 
     };
-
-    /**
-     * ionicView.enter :: Event Handler
-     * description: Event Handler for view enter -> check if user is logged in
-     *              If the user isn't logged in, refer to login
-     */
-    $scope.$on('$ionicView.enter', function (e) {
-      if ($scope.userId === -1) {
-
-        // show login template
-        $scope.loginData = {};
-        $state.go('app.login');
-
-      }
-    });
 
     /**
      * doLogin :: function
@@ -80,12 +36,12 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
           .success(function (data) {
             console.log(data);
             if (data.status) {
-              $scope.userId = data.user._id;
-              $scope.user = data.user;
+              $rootScope.userId = data.user._id;
+              $rootScope.user = data.user;
               $state.go('app.taskSelection');
 
-              localStorage.userId = $scope.userId;
-              $scope.initTasks();
+              localStorage.userId = $rootScope.userId;
+              $rootScope.initTasks();
             }
             else {
               $scope.alertPopup("Incorrect Username or Password");
@@ -106,18 +62,18 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      * description: NFC Tag Login Handler function
      */
     $scope.doLoginByNFC = function (nfc) {
-      if ($scope.userId === -1) {
+      if ($rootScope.userId === -1) {
         AppFactory.loginUserByNFC(nfc)
           .success(function (data) {
             console.log(data);
             if (data.status) {
-              $scope.userId = data.user._id;
-              $scope.user = data.user;
+              $rootScope.userId = data.user._id;
+              $rootScope.user = data.user;
               $state.go('app.taskSelection');
               $scope.loginResult = 'Logged In Successfully';
 
-              localStorage.userId = $scope.userId;
-              $scope.initTasks();
+              localStorage.userId = $rootScope.userId;
+              $rootScope.initTasks();
               $scope.initMyWeights();
             }
             else {
@@ -170,7 +126,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      */
     $scope.setConnected = function () {
       $scope.isConnected = true;
-      console.log('connected to host ' + $scope.host + ' on port ' + $scope.port);
+      console.log('connected to host ' + $rootScope.host + ' on port ' + $rootScope.port);
     };
 
     /**
@@ -179,7 +135,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      */
     $scope.setDisconnected = function () {
       $scope.isConnected = false;
-      console.log('disconnected from host ' + $scope.host + ' on port ' + $scope.port);
+      console.log('disconnected from host ' + $rootScope.host + ' on port ' + $rootScope.port);
     };
 
     /**
@@ -188,7 +144,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      */
     $scope.connectToIndicator = function () {
       if (!$scope.isConnected) { // CONNECT TO HOST IF NOT ALREADY CONNECTED
-        $scope.connectToHost($scope.host, $scope.port);
+        $scope.connectToHost($rootScope.host, $rootScope.port);
       }
     };
 
@@ -396,8 +352,14 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
     $scope.tare = function () {
       console.log('Tare button clicked');
       if ($scope.isConnected) {
-        $scope.sendCommand('ST');
+        $scope.sendCommand('SR');
+        $scope.weight = 0;
       }
+    };
+
+    $scope.tareAndGoToTask = function(){
+      $scope.tare();
+      $state.go('app.task');
     };
 
     /**
@@ -406,8 +368,8 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      */
     $scope.saveSettings = function (host, port) {
       if (host && host.length > 0 && port && !isNaN(port)) {
-        $scope.host = host;
-        $scope.port = port;
+        $rootScope.host = host;
+        $rootScope.port = port;
         localStorage.host = host;
         localStorage.port = port;
         console.log('Setings saved, connection is set to: ' + host + ':' + port);
@@ -436,7 +398,8 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $scope.currentTask = data.data;
               console.log('Got task data!');
               console.log($scope.currentTask);
-              $state.go('app.task');
+              $state.go('app.palletZero');
+              $scope.connectToIndicator();
             }
             else {
               $scope.alertPopup("Task Not Found", "Please refresh and try again");
@@ -479,7 +442,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
           AppFactory.setOrderAsFinished($scope.currentTaskId)
             .success(function (data) {
               if (data.status) {
-                $scope.initTasks();
+                $rootScope.initTasks();
                 $scope.alertPopup("Task Finished", "Great Job!");
               }
               else {
@@ -504,9 +467,9 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      * initTasks :: function
      * description: Gets all the ACTIVE tasks for the current user
      */
-    $scope.initTasks = function () {
-      if ($scope.userId !== -1 && $scope.user) {
-        AppFactory.getOrdersByUsername($scope.user.userName)
+    $rootScope.initTasks = function () {
+      if ($rootScope.userId !== -1 && $rootScope.user) {
+        AppFactory.getOrdersByUsername($rootScope.user.userName)
           .success(function (data) {
             if (data.status) {
               console.log('Got new tasks');
@@ -531,10 +494,10 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      * decription: Gets all of the users saved weights and refers to myweights view
      */
     $scope.initMyWeights = function () {
-      if ($scope.userId !== -1 && $scope.user) {
+      if ($rootScope.userId !== -1 && $rootScope.user) {
         $scope.loading = true;
         $state.go('app.myWeights');
-        AppFactory.showAllWeightsByUserName($scope.user.userName)
+        AppFactory.showAllWeightsByUserName($rootScope.user.userName)
           .success(function (data) {
             if (data.status) {
               $scope.myWeights = data.data;
@@ -556,8 +519,8 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      * description: Logs out the current user
      */
     $scope.logout = function () {
-      $scope.userId = -1;
-      $scope.user = {};
+      $rootScope.userId = -1;
+      $rootScope.user = {};
       $scope.loginData = {};
       $scope.tasks = [];
       localStorage.removeItem('userId');
@@ -576,7 +539,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         function (position) {
           var latitude = position.coords.latitude;
           var longitude = position.coords.longitude;
-          AppFactory.insertNewWeight($scope.user.userName, $scope.weight, latitude, longitude)
+          AppFactory.insertNewWeight($rootScope.user.userName, $scope.weight, latitude, longitude)
             .success(function (data) {
               console.log(data);
               if (data.status) {
@@ -708,7 +671,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
           function (nfcEvent) {
             var tag = nfcEvent.tag;
             var tagId = nfc.bytesToHexString(tag.id);
-            if (!$scope.user) {
+            if (!$rootScope.user) {
               $scope.alertPopup('NFC Detected','Logging in...');
               $scope.doLoginByNFC(tagId);
             }
