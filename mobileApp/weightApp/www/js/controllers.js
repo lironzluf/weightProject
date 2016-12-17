@@ -20,6 +20,8 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       $scope.loading = true;
       $scope.myWeights = [];
       $scope.loginData = {};
+      $rootScope.user = null;
+      $rootScope.userId = -1;
 
     };
 
@@ -44,16 +46,16 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $rootScope.initTasks();
             }
             else {
-              $scope.alertPopup("Incorrect Username or Password");
+              $rootScope.alertPopup("Incorrect Username or Password");
             }
           })
           .error(function (e) {
             console.log(e);
-            $scope.alertPopup("Error Logging In");
+            $rootScope.alertPopup("Error Logging In");
           });
       }
       else {
-        $scope.alertPopup("Please fill in these required fields");
+        $rootScope.alertPopup("Please fill in these required fields");
       }
     };
 
@@ -61,7 +63,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      * doLoginByNFC :: function
      * description: NFC Tag Login Handler function
      */
-    $scope.doLoginByNFC = function (nfc) {
+    $rootScope.doLoginByNFC = function (nfc) {
       if ($rootScope.userId === -1) {
         AppFactory.loginUserByNFC(nfc)
           .success(function (data) {
@@ -74,7 +76,6 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
 
               localStorage.userId = $rootScope.userId;
               $rootScope.initTasks();
-              $scope.initMyWeights();
             }
             else {
               $scope.loginResult = 'Incorrect Username or Password';
@@ -86,7 +87,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
           });
       }
       else {
-        $scope.alertPopup("Already Logged In");
+        $rootScope.alertPopup("Already Logged In");
       }
     };
 
@@ -112,7 +113,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
           port,
           $scope.setConnected,
           function (errorMessage) {
-            $scope.alertPopup("Error during connection", "error: " + errorMessage);
+            $rootScope.alertPopup("Error during connection", "error: " + errorMessage);
           });
       }
       else {
@@ -152,7 +153,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      * alertPopup :: function
      * description: Generic function for Ionic Alert Popup
      */
-    $scope.alertPopup = function (title, subtitle, callback) {
+    $rootScope.alertPopup = function (title, subtitle, callback) {
       var alertPopup = $ionicPopup.alert({
         title: title,
         template: subtitle,
@@ -226,7 +227,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       else {
         console.log('input sku: ' + input);
         console.log('wrong sku, sku is: ' + $scope.currentTask[$scope.currentItemIdx].sku);
-        $scope.alertPopup("Wrong SKU", "The SKU inserted is incorrect");
+        $rootScope.alertPopup("Wrong SKU", "The SKU inserted is incorrect");
       }
     };
 
@@ -308,13 +309,13 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         if ($scope.data.indexOf('N+') === 0) { // PC Mode
           $scope.data = $scope.data.substring(2);
           if (!isNaN($scope.data)) {
-            $scope.weight = parseInt($scope.data);
+            $scope.weight = parseFloat($scope.data);
           }
         }
         else if ($scope.data.indexOf('+') === 0) { // Repeating Send Mode
           $scope.data = $scope.data.substring(1);
           if (!isNaN($scope.data)) {
-            $scope.weight = parseInt($scope.data);
+            $scope.weight = parseFloat($scope.data);
           }
         }
         else if ($scope.data.toLowerCase().indexOf('ok') > -1) { // Tare
@@ -376,7 +377,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         $ionicHistory.goBack();
       }
       else {
-        $scope.alertPopup("Settings not saved", "Please review the data inserted");
+        $rootScope.alertPopup("Settings not saved", "Please review the data inserted");
       }
     };
 
@@ -402,14 +403,14 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
               $scope.connectToIndicator();
             }
             else {
-              $scope.alertPopup("Task Not Found", "Please refresh and try again");
+              $rootScope.alertPopup("Task Not Found", "Please refresh and try again");
               console.log('Task not found');
             }
 
           })
           .error(function (e) {
             $scope.loading = false;
-            $scope.alertPopup("Error Loading Task Data", "Please try again");
+            $rootScope.alertPopup("Error Loading Task Data", "Please try again");
             console.log(e);
           });
 
@@ -432,7 +433,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
       console.log('weight/dbWeight: ' + parseFloat(weight) / parseFloat(dbWeight));
       console.log('result: ' + Math.abs(1 - (parseFloat(weight) / parseFloat(dbWeight))));
       if (Math.abs(1 - (parseFloat(weight) / parseFloat(dbWeight))) > 0.1) {
-        $scope.alertPopup("Incorrect weight", "Please try again");
+        $rootScope.alertPopup("Incorrect weight", "Please try again");
       }
       else {
 
@@ -443,20 +444,21 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             .success(function (data) {
               if (data.status) {
                 $rootScope.initTasks();
-                $scope.alertPopup("Task Finished", "Great Job!");
+                $rootScope.alertPopup("Task Finished", "Great Job!");
               }
               else {
-                $scope.alertPopup("Error", "Error updating task. Please try again.");
+                $rootScope.alertPopup("Error", "Error updating task. Please try again.");
               }
             })
             .error(function (e) {
-              $scope.alertPopup("Error", "Error updating task. Please try again.");
+              $rootScope.alertPopup("Error", "Error updating task. Please try again.");
               console.log(e);
             });
         }
         else {
 
-          $scope.alertPopup("Correct weight", "Proceeding to next item");
+          $rootScope.alertPopup("Correct weight", "Proceeding to next item");
+          $scope.tare();
           $scope.currentItemIdx++;
           $state.go('app.task');
         }
@@ -520,11 +522,11 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      */
     $scope.logout = function () {
       $rootScope.userId = -1;
-      $rootScope.user = {};
+      $rootScope.user = null;
       $scope.loginData = {};
       $scope.tasks = [];
       localStorage.removeItem('userId');
-      $scope.alertPopup("Logged out successfully");
+      $rootScope.alertPopup("Logged out successfully");
       $state.go('app.login');
     };
 
@@ -543,18 +545,18 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             .success(function (data) {
               console.log(data);
               if (data.status) {
-                $scope.alertPopup("Saved successfully");
+                $rootScope.alertPopup("Saved successfully");
               } else {
-                $scope.alertPopup("Error", "Weight Not Saved");
+                $rootScope.alertPopup("Error", "Weight Not Saved");
               }
             })
             .error(function (e) {
               console.log(e);
-              $scope.alertPopup("Exception", e);
+              $rootScope.alertPopup("Exception", e);
             });
         },
         function (error) {
-          $scope.alertPopup("Geolocation Error", 'code: ' + error.code + '\n' +
+          $rootScope.alertPopup("Geolocation Error", 'code: ' + error.code + '\n' +
             'message: ' + error.message + '\n');
         });
     };
@@ -623,15 +625,20 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
      * description: Takes a screenshot and prompts sharing option
      */
     $scope.takeScreenShotAndShare = function () {
-      var imageLink;
-      navigator.screenshot.save(function (error, res) {
-        if (error) {
-          console.error(error);
-        } else {
-          imageLink = res.filePath;
-          window.plugins.socialsharing.share(null, null, 'file://' + imageLink, null);
-        }
-      }, 'jpg', 50, 'myScreenShot');
+      if (navigator.screenshot) {
+        var imageLink;
+        navigator.screenshot.save(function (error, res) {
+          if (error) {
+            console.error(error);
+          } else {
+            imageLink = res.filePath;
+            window.plugins.socialsharing.share(null, null, 'file://' + imageLink, null);
+          }
+        }, 'jpg', 50, 'myScreenShot');
+      }
+      else {
+        $rootScope.alertPopup('Screenshot is disabled','');
+      }
     };
 
 
@@ -646,7 +653,7 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             $scope.checkLocation(result.text);
           },
           function (error) {
-            $scope.alertPopup("Scanning failed: ", error);
+            $rootScope.alertPopup("Scanning failed: ", error);
           },
           {
             "preferFrontCamera": false, // iOS and Android
@@ -657,14 +664,10 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
         );
       }
       else {
-        $scope.alertPopup("Error","Barcode scanning is disabled for your device");
+        $rootScope.alertPopup("Error","Barcode scanning is disabled for your device");
       }
     };
 
-    /**
-     * nfc :: Event Handler
-     * description: Listens for an NFC tag event
-     */
     if (window.cordova) {
       $ionicPlatform.ready(function () {
         nfc.addTagDiscoveredListener(
@@ -673,17 +676,17 @@ angular.module('weightapp.controllers', ['weightapp.factory'])
             var tagId = nfc.bytesToHexString(tag.id);
             if (!$rootScope.user) {
               $scope.alertPopup('NFC Detected','Logging in...');
-              $scope.doLoginByNFC(tagId);
+              $rootScope.doLoginByNFC(tagId);
             }
             else {
-              $scope.alertPopup('NFC Detected', 'User already logged in');
+              $rootScope.alertPopup('NFC Detected', 'User already logged in');
             }
           },
           function () { // success callback
             // alert("Waiting for NDEF tag");
           },
           function (error) { // error callback
-            alertPopup("Error adding NDEF listener ", JSON.stringify(error));
+            $rootScope.alertPopup("Error adding NDEF listener ", JSON.stringify(error));
           }
         );
       });
